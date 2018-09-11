@@ -1,0 +1,61 @@
+a {color: #444;}
+a:hover {
+    color: #444;
+}
+table {
+    max-width: 100%;
+    background-color: transparent;
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+img {
+    height: auto;
+    max-width: 100%;
+    vertical-align: middle;
+    border: 0;
+}
+
+.p-10 {padding: 10px;}
+.pt-15 {padding-top: 15px;}
+.p-5 {padding-top: 5px;}
+.inline-pic {
+    display: inline-block;
+    max-width: 100%;
+}
+.block-pic {
+    display: block;
+    max-width: 100%;
+}
+.ks-clear {
+    *zoom: 1;
+}
+.ks-clear:before,
+.ks-clear:after {
+    display: table;
+    content: "";
+}
+.ks-clear:after {
+    clear: both;
+}
+.ks-text-overflow {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+body {
+    background-color: #E1E1E1;
+    color: #333;
+}
+.leftcol {
+    border-radius: 4px;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+}
+.noreply, .friend, .author, .userinfo, .recentto {
+    background-color: white; 
+    margin-bottom: 15px; 
+    border-radius: 4px; 
+    -moz-border-radius: 4px; 
+    -webkit-border-radius: 4px;
+}
+.noreply div.ivu-card-head p, .friend div.ivu-card-head p, .author div.ivu-card-head p, .recentto div.ivu-card-head p, .recentre div.ivu-card-head p, .comments div.ivu-card-head p {font-weight: normal;}
