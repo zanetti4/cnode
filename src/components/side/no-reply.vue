@@ -49,24 +49,11 @@ export default {
 </script>
 
 <style>
-.noreply div.ivu-card-head, .friend div.ivu-card-head, .author div.ivu-card-head, .comments div.ivu-card-head {
-  border-bottom: none;
-  background-color: #F6F6F6;
-  padding: 10px;
-  border-radius: 4px 4px 0 0; 
-  -moz-border-radius: 4px 4px 0 0; 
-  -webkit-border-radius: 4px 4px 0 0; 
-}
-.noreply div.ivu-cell-arrow {display: none;}
 .noreply div.ivu-cell-title {
   line-height: 20px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.noreply div.ivu-cell {
-  padding: 7px 10px;
-}
-.noreply div.ivu-card-body, .friend div.ivu-card-body {padding: 10px 0;}
 .noreply a.ivu-cell-link, .noreply div.ivu-cell-main {display: block;}
 </style>

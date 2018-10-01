@@ -1,13 +1,18 @@
-a {color: #444;}
+a {
+    color: #444;
+}
+
 a:hover {
     color: #444;
 }
+
 table {
     max-width: 100%;
     background-color: transparent;
     border-collapse: collapse;
     border-spacing: 0;
 }
+
 img {
     height: auto;
     max-width: 100%;
@@ -15,47 +20,271 @@ img {
     border: 0;
 }
 
-.p-10 {padding: 10px;}
-.pt-15 {padding-top: 15px;}
-.p-5 {padding-top: 5px;}
+.p-10 {
+    padding: 10px;
+}
+
+.ptb-10 {
+    padding: 10px 0;
+}
+
+.pt-15 {
+    padding-top: 15px;
+}
+
+.p-5 {
+    padding-top: 5px;
+}
+
+.ta-r {
+    text-align: right;
+}
+
 .inline-pic {
     display: inline-block;
     max-width: 100%;
 }
+
 .block-pic {
     display: block;
     max-width: 100%;
 }
+
 .ks-clear {
     *zoom: 1;
 }
+
 .ks-clear:before,
 .ks-clear:after {
     display: table;
     content: "";
 }
+
 .ks-clear:after {
     clear: both;
 }
+
 .ks-text-overflow {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
+
 body {
     background-color: #E1E1E1;
     color: #333;
 }
+
 .leftcol {
     border-radius: 4px;
     -moz-border-radius: 4px;
     -webkit-border-radius: 4px;
+    position: static;
 }
-.noreply, .friend, .author, .userinfo, .recentto {
-    background-color: white; 
-    margin-bottom: 15px; 
-    border-radius: 4px; 
-    -moz-border-radius: 4px; 
+
+.noreply,
+.friend,
+.author,
+.userinfo,
+.recentto,
+.markdown {
+    background-color: white;
+    margin-bottom: 15px;
+    border-radius: 4px;
+    -moz-border-radius: 4px;
     -webkit-border-radius: 4px;
 }
-.noreply div.ivu-card-head p, .friend div.ivu-card-head p, .author div.ivu-card-head p, .recentto div.ivu-card-head p, .recentre div.ivu-card-head p, .comments div.ivu-card-head p {font-weight: normal;}
+
+.noreply div.ivu-card-head p,
+.friend div.ivu-card-head p,
+.author div.ivu-card-head p,
+.recentto div.ivu-card-head p,
+.recentre div.ivu-card-head p,
+.comments div.ivu-card-head p,
+.about div.ivu-card-head p,
+.markdown div.ivu-card-head p {
+    font-weight: normal;
+}
+
+.recentto div.ivu-card-head,
+.recentre div.ivu-card-head {
+    border-bottom: solid 1px #E5E5E5;
+    background-color: #F6F6F6;
+    padding: 10px;
+    border-radius: 4px 4px 0 0;
+    -moz-border-radius: 4px 4px 0 0;
+    -webkit-border-radius: 4px 4px 0 0;
+}
+
+.recentto div.ivu-card-body,
+.recentre div.ivu-card-body {
+    padding: 0;
+}
+
+.recentto article,
+.recentre article {
+    padding: 10px;
+    border-bottom: solid 1px #E5E5E5;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-flow: row;
+    flex-flow: row;
+}
+
+.recentto article span.ivu-avatar,
+.recentre-avatar {
+    -webkit-flex: 0 0 auto;
+    flex: 0 0 auto;
+}
+
+.recentto-numbers {
+    -webkit-flex: 0 0 9%;
+    flex: 0 0 9%;
+    padding-left: 10px;
+}
+
+.recentto-numbers span {
+    font-size: 12px;
+    color: #B4B4B4;
+}
+
+.recentto-reply span {
+    margin-right: 10px;
+}
+
+.recentto-tit:link,
+.recentto-tit:visited {
+    -webkit-flex: 1 0 72%;
+    flex: 1 0 72%;
+    margin-left: 10px;
+    color: #08C;
+    padding-right: 10px;
+}
+
+.recentto-tit:hover {
+    text-decoration: underline;
+}
+
+.recentto-reply:link,
+.recentto-reply:visited {
+    -webkit-flex: 0 0 11%;
+    flex: 0 0 11%;
+    font-size: 12px;
+    color: #777;
+}
+
+.recentto-reply:hover,
+.recentto-more:hover {
+    color: #08C;
+}
+
+.recentto-tag {
+    margin-left: 5px;
+    color: white;
+    padding: 4px;
+    font-size: 10px;
+    font-weight: 400;
+    border-radius: 4px;
+    text-align: center;
+    vertical-align: middle;
+    -webkit-flex: 0 0 auto;
+    flex: 0 0 auto;
+}
+
+.good {
+    background: #e67e22;
+}
+
+.top {
+    background-color: #42b983;
+}
+
+.userinfo div.ivu-breadcrumb a:link,
+.userinfo div.ivu-breadcrumb a:visited,
+.collec-bread span a:link,
+.collec-bread span a:visited {
+    color: #80BD01;
+}
+
+.userinfo div.ivu-breadcrumb a:hover,
+.collec-bread span a:hover {
+    text-decoration: underline;
+}
+
+.userinfo div.ivu-breadcrumb>span:last-child,
+.collec-bread>span:last-child {
+    font-weight: normal;
+}
+
+.userinfo span.ivu-breadcrumb-item-separator,
+.collec-bread span span.ivu-breadcrumb-item-separator {
+    color: #CCC;
+    margin: 0 3px;
+}
+
+.noreply div.ivu-card-head,
+.friend div.ivu-card-head,
+.author div.ivu-card-head,
+.comments div.ivu-card-head,
+.about div.ivu-card-head,
+.markdown div.ivu-card-head {
+    border-bottom: none;
+    background-color: #F6F6F6;
+    padding: 10px;
+    border-radius: 4px 4px 0 0;
+    -moz-border-radius: 4px 4px 0 0;
+    -webkit-border-radius: 4px 4px 0 0;
+}
+
+.mainpage {
+    padding: 10px;
+}
+
+.mainpage li.ivu-page-item-active,
+.mainpage li.ivu-page-item:hover,
+.mainpage li.ivu-page-next:hover,
+.mainpage li.ivu-page-prev:hover {
+    border-color: #80BD01;
+}
+
+.mainpage li.ivu-page-item-active a,
+.mainpage li.ivu-page-item-active:hover a,
+.mainpage li.ivu-page-item:hover a,
+.mainpage li.ivu-page-next:hover a,
+.mainpage li.ivu-page-prev:hover a {
+    color: #80BD01;
+}
+
+.userinfo div.ivu-breadcrumb {
+    border-bottom: solid 1px #E5E5E5;
+    background-color: #F6F6F6;
+    padding: 10px;
+    border-radius: 4px 4px 0 0;
+    -moz-border-radius: 4px 4px 0 0;
+    -webkit-border-radius: 4px 4px 0 0;
+}
+
+.collect {
+    background-color: #80BD01;
+    border-color: #80BD01;
+}
+
+.collect:hover {
+    background-color: #6BA44E;
+    border-color: #6BA44E;
+}
+
+.noreply div.ivu-card-body,
+.friend div.ivu-card-body,
+.markdown div.ivu-card-body {
+    padding: 10px 0;
+}
+
+.noreply div.ivu-cell {
+    padding: 7px 10px;
+}
+
+.noreply div.ivu-cell-arrow,
+.markdown div.ivu-cell-arrow {
+    display: none;
+}

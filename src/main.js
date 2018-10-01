@@ -6,24 +6,25 @@ import iView from 'iview';
 import router from './router'
 import store from './store';
 import api from './server';
-import relativeTime from './assets/js/relative-time';
+import myMethods from './assets/js/my-methods';
 import 'iview/dist/styles/iview.css';
 import '@/assets/css/index.css';
+import 'jquery';
 
 Vue.use(api);
-Vue.use(relativeTime);
+Vue.use(myMethods);
 Vue.use(iView);
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */
 new Vue({
-  el: '#app',
-  router,
-  store,
-  api,
-  relativeTime,
-  components: { App },
-  template: '<App/>'
+    el: '#app',
+    router,
+    store,
+    api,
+    myMethods,
+    components: { App },
+    template: '<App/>'
 })
 
 /* var vm = new Vue({

@@ -1,10 +1,13 @@
 <template>
   <section class="recentto">
     <Card title="最近创建的话题" :bordered="false" :dis-hover="true">
+      <Spin size="large" fix v-if="spinShow"></Spin>
       <CellGroup>
         <article v-for="item in recentTo" :key="item.id">
           <Avatar shape="square" :src="item.author.avatar_url" size="small" />
           <span class="recentto-numbers">{{getReplyLen(item.id)}}/<span>{{getVisitLen(item.id)}}</span></span>
+          <!-- <span v-if="isTop(item.id) || isGood(item.id)" class="recentto-tag" :class="{top: isTop(item.id), good: isGood(item.id)}">{{topGood(item.id)}}</span> -->
+          <span v-if="isTopGood(item.id, 'top') || isTopGood(item.id, 'good')" class="recentto-tag" :class="{top: isTopGood(item.id, 'top'), good: isTopGood(item.id, 'good')}">{{topGood(item.id)}}</span>
           <router-link 
           :to="{name: 'Detail', params: {id: item.id}}"
           class="recentto-tit ks-text-overflow"
@@ -13,17 +16,20 @@
           <!-- <router-link :to="{name: 'Detail', params: {id: item.id, hash: getLastReplyId(item.id)}}" class="recentto-reply" v-if="getLastReplyAvatar(item.id)">
             <Avatar shape="square" :src="getLastReplyAvatar(item.id)" size="small" />{{lastReplyTime(item.last_reply_at)}}
           </router-link> -->
+          <router-link :to="{name: 'Detail', params: {id: item.id}, hash: getLastReplyId(item.id)}" class="recentto-reply" v-if="lastReplyAvatar(item.id)">
+            <Avatar shape="square" :src="lastReplyAvatar(item.id)" size="small" />{{lastReplyTime(item.last_reply_at)}}
+          </router-link>
           <!-- <a :href="`/detail/${item.id}${getLastReplyId(item.id)}`" class="recentto-reply" v-if="getLastReplyAvatar(item.id)">
             <Avatar shape="square" :src="getLastReplyAvatar(item.id)" size="small" />{{lastReplyTime(item.last_reply_at)}}
           </a> -->
-          <a href="javascript:;" class="recentto-reply" v-if="getLastReplyAvatar(item.id)" @click="toDetailLastReply(item.id, getLastReplyId(item.id))">
+          <!-- <a href="javascript:;" class="recentto-reply" v-if="getLastReplyAvatar(item.id)" @click="toDetailLastReply(item.id, getLastReplyId(item.id))">
             <Avatar shape="square" :src="getLastReplyAvatar(item.id)" size="small" />{{lastReplyTime(item.last_reply_at)}}
-          </a>
+          </a> -->
         </article>
       </CellGroup>
-      <a href="#" class="recentto-more" style="display: none;">
+      <router-link :to="{name: 'Topics'}" class="recentto-more">
         查看更多<Icon type="ios-arrow-forward" />
-      </a>
+      </router-link>
     </Card>
   </section>
 </template>
@@ -88,22 +94,24 @@ export default {
   },
   data(){
     return {
-      details: []
+      details: [],
+      spinShow: true
     };
   },
-  async created(){
+  created(){
     /* this.details = this.recentTo.map(async topic => {
       let {data} = await this.$api.getDetail(topic.id);
 
       return data.data;
     }); */
 
-    for(let i = 0; i < this.recentTo.length; i++){
+    /* for(let i = 0; i < this.recentTo.length; i++){
       let {data} = await this.$api.getDetail(this.recentTo[i].id);
 
       this.details.push(data.data);
-    };
+    }; */
 
+    this.getDetails();
     //console.log(this.details);
   },
   /* mounted(){
@@ -116,7 +124,27 @@ export default {
       });
     });
   }, */
+  watch: {
+    /* recentTo(){
+      this.getDetails();
+    } */
+    recentTo: 'getDetails'
+  },
   methods: {
+    //根据话题 id 获取话题详细信息
+    async getDetails(){
+      //this.details = [];
+      //console.log(this.recentTo);
+      this.spinShow = true;
+
+      for(let i = 0; i < this.recentTo.length; i++){
+        let {data} = await this.$api.getDetail(this.recentTo[i].id);
+
+        this.details.push(data.data);
+      };
+
+      this.spinShow = false;
+    },
     //计算最后回复的相对时间
     /* lastReplyTime(replyTime){
       let obj = time.getTime(replyTime, new Date().toISOString());
@@ -145,8 +173,64 @@ export default {
     lastReplyTime: function(replyTime){
       return this.$myMethods.getRelativeTime(replyTime);
     },
+    //判断话题是否是置顶或精华
+    /* isTopGood(topicId, topGood){
+      let topic = this.details.find(obj => obj.id === topicId);
+
+      if(topic && topGood === 'top'){
+        //该话题存在且获取置顶
+        return topic.top;
+      }else if(topic && topGood === 'good'){
+        //该话题存在且获取精华
+        return topic.good;
+      }else{
+        //该话题不存在或者关键词错误
+        return false;
+      }
+    }, */
+    isTopGood(topicId, topGood){
+      return this.$myMethods.topOrGood(topicId, topGood, this.details);
+    },
+
+    //判断话题是否是置顶
+    /* isTop(topicId){
+      let topic = this.details.find(obj => obj.id === topicId);
+
+      if(topic){
+        //该话题存在
+        return topic.top;
+      }else{
+        //该话题不存在
+        return false;
+      }
+    }, */
+    //判断话题是否是精华
+    /* isGood(topicId){
+      let topic = this.details.find(obj => obj.id === topicId);
+
+      if(topic){
+        //该话题存在
+        return topic.good;
+      }else{
+        //该话题不存在
+        return false;
+      }
+    }, */
+    //置顶或精华
+    topGood(topicId){
+      if(this.isTopGood(topicId, 'top') && this.isTopGood(topicId, 'good')){
+        //优先显示置顶
+        return '置顶';
+      }else if(this.isTopGood(topicId, 'top')){
+        //置顶
+        return '置顶';
+      }else if(this.isTopGood(topicId, 'good')){
+        //精华
+        return '精华';
+      }
+    },
     //获取最后回复者的头像
-    getLastReplyAvatar(topicId){
+    /* getLastReplyAvatar(topicId){
       let topic = this.details.find(obj => obj.id === topicId);
 
       if(topic){
@@ -164,6 +248,10 @@ export default {
         //该话题不存在
         return '';
       }
+    }, */
+
+    lastReplyAvatar(topicId){
+      return this.$myMethods.getLastReplyAvatar(topicId, this.details);
     },
     //获取最后一条回复的 id
     getLastReplyId(topicId){
@@ -176,6 +264,7 @@ export default {
         if(allReplies.length > 0){
           //话题有回复
           let hash = `#${allReplies[allReplies.length - 1].id}`;
+          //let hash = allReplies[allReplies.length - 1].id;
           //console.log(encodeURIComponent('#'));
 
           return hash;
@@ -189,7 +278,7 @@ export default {
       }
     },
     //获取回复数
-    getReplyLen(topicId){
+    /* getReplyLen(topicId){
       let topic = this.details.find(obj => obj.id === topicId);
 
       if(topic){
@@ -199,9 +288,12 @@ export default {
         //该话题不存在
         return -1;
       }
+    }, */
+    getReplyLen(topicId){
+      return this.$myMethods.getNumbers(topicId, this.details, 'reply');
     },
     //获取浏览数
-    getVisitLen(topicId){
+    /* getVisitLen(topicId){
       let topic = this.details.find(obj => obj.id === topicId);
 
       if(topic){
@@ -211,6 +303,9 @@ export default {
         //该话题不存在
         return -1;
       }
+    }, */
+    getVisitLen(topicId){
+      return this.$myMethods.getNumbers(topicId, this.details, 'visit');
     },
     //跳转到话题页的最后一条评论处
     toDetailLastReply(topicId, hash){
@@ -229,54 +324,6 @@ export default {
 </script>
 
 <style>
-.recentto div.ivu-card-head, .recentre div.ivu-card-head {
-  border-bottom: solid 1px #E5E5E5;
-  background-color: #F6F6F6;
-  padding: 10px;
-  border-radius: 4px 4px 0 0; 
-  -moz-border-radius: 4px 4px 0 0; 
-  -webkit-border-radius: 4px 4px 0 0; 
-}
-.recentto div.ivu-card-body, .recentre div.ivu-card-body {padding: 0;}
-.recentto article, .recentre article {
-  padding: 10px;
-  border-bottom: solid 1px #E5E5E5;
-  display: -webkit-flex;
-  display: flex;
-  -webkit-flex-flow: row;
-  flex-flow: row;
-}
-.recentto article span.ivu-avatar, .recentre-avatar {
-  -webkit-flex: 0 0 auto;
-  flex: 0 0 auto;
-}
-.recentto-numbers {
-  -webkit-flex: 0 0 8%;
-  flex: 0 0 8%;
-  padding-left: 10px;
-}
-.recentto-numbers span {
-  font-size: 12px;
-  color: #B4B4B4;
-}
-.recentto-reply span {
-  margin-right: 10px;
-}
-.recentto-tit:link, .recentto-tit:visited {
-  -webkit-flex: 1 0 75%;
-  flex: 1 0 75%;
-  margin-left: 10px;
-  color: #08C;
-  padding-right: 10px;
-}
-.recentto-tit:hover {text-decoration: underline;}
-.recentto-reply:link, .recentto-reply:visited {
-  -webkit-flex: 0 0 11%;
-  flex: 0 0 11%;
-  font-size: 12px;
-  color: #777;
-}
-.recentto-reply:hover, .recentto-more:hover {color: #08C;}
 .recentto-more:link, .recentto-more:visited {
   display: block;
   line-height: 40px;

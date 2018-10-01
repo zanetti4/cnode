@@ -2,9 +2,9 @@
   <section class="comments">
     <Card :title="numReplies" :bordered="false" :dis-hover="true">
       <CellGroup>
-        <Row type="flex" justify="space-around" class="code-row-bg comments-row" v-for="(item, index) in allReplies" :key="item.id" :class="{'comments-rowhl': item.ups.length > 2}">
+        <Row type="flex" justify="space-around" class="code-row-bg comments-row" v-for="(item, index) in allReplies" :key="item.id" :class="{'comments-rowhl': item.ups.length > 2}" :id="item.id">
           <Col span="1">
-            <router-link :to="{name: 'User', params: {loginname: item.author.loginname}}" :name="item.id">
+            <router-link :to="{name: 'User', params: {loginname: item.author.loginname}}">
               <Avatar shape="square" :src="item.author.avatar_url" />
             </router-link>
           </Col>
@@ -17,7 +17,7 @@
                 <span>{{index + 1}}楼•{{replyTime(item.create_at)}}</span>
               </Col>
               <Col span="2" class-name="comments-row-up">
-                <Icon type="ios-thumbs-up-outline" size="18" /> {{item.ups.length}}
+                <Icon type="ios-thumbs-up-outline" size="18" @click="up(item.id)" :class="{'ivu-icon-ios-thumbs-up': item.is_uped}" /> {{item.ups.length}}
               </Col>
             </Row>
             <p v-html="item.content" class="comments-row-con"></p>
@@ -30,6 +30,8 @@
 
 <script>
 import time from '@/assets/js/time';
+import Cookies from 'js-cookie';
+import axios from 'axios';
 
 export default {
   name: 'Comments',
@@ -82,7 +84,41 @@ export default {
         default:
           return '刚刚';
       };
-    }
+    },
+    //点赞
+    up(id){
+      let accesstoken = Cookies.get('accesstoken');
+      
+      if(accesstoken){
+        //登录了
+        let myId = Cookies.get('id');
+
+        axios.post(`https://cnodejs.org/api/v1/reply/${id}/ups`, {accesstoken}).then((res) => {
+          //console.log(res.data);
+          this.$emit('up-to-detail', {
+            id,
+            action: res.data.action,
+            myId
+          });
+        });
+      }else{
+        //没登录
+        alert('请先登录，登录后即可点赞。');
+      }
+    },
+    /* async up(id){
+      let accesstoken = Cookies.get('accesstoken');
+      
+      if(accesstoken){
+        //登录了
+        let {data} = await this.$api.up(id, {accesstoken});
+
+        console.log(data);
+      }else{
+        //没登录
+        alert('请先登录，登录后即可点赞。');
+      }
+    } */
   }
 }
 </script>
@@ -108,7 +144,7 @@ export default {
 .comments-row-nft span {font-size: 12px;}
 .comments-row-up i {
   vertical-align: middle;
-  cursor: not-allowed;
+  cursor: pointer;
   color: black;
 }
 .comments-row-up i:hover {color: #08C;}

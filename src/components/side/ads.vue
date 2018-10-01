@@ -21,7 +21,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 .ads {
   background-color: white;
   margin-bottom: 15px;

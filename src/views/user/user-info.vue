@@ -8,8 +8,7 @@
         <Avatar shape="square" :src="user.avatar_url" size="large" /><span class="userinfo-con-name">{{user.loginname}}</span>
       </div>
       <div>{{user.score}} 积分</div>
-      <div>{{collection.length}}个话题收藏</div>
-      <!-- <a href="#">{{collection.length}}个话题收藏</a> -->
+      <router-link :to="{name: 'Collections'}">{{collection.length}}个话题收藏</router-link>
       <div class="userinfo-con-time">
         注册时间 {{signUp}}
       </div>
@@ -28,8 +27,8 @@ export default {
       collection: []
     };
   },
-  async created(){
-    //发送请求：用户信息，并向上传递
+  created(){
+    /* //发送请求：用户信息，并向上传递
     let loginname = this.$route.params.loginname;
     let {data} = await this.$api.getUser(loginname);
 
@@ -40,7 +39,14 @@ export default {
     let dataCollect = await this.$api.getCollection(loginname);
 
     this.collection = dataCollect.data.data;
-    //console.log(dataCollect.data.data);
+    //console.log(dataCollect.data.data); */
+
+    this.getUserCollection();
+  },
+  watch: {
+    $route(){
+      this.getUserCollection();
+    }
   },
   computed: {
     //注册时间
@@ -70,26 +76,27 @@ export default {
         };
       }
     }
+  },
+  methods: {
+    //发送请求：用户信息，并向上传递；用户所收藏的主题
+    async getUserCollection(){
+      let loginname = this.$route.params.loginname;
+      let {data} = await this.$api.getUser(loginname);
+
+      this.user = data.data;
+      this.$emit('userinfo-to-user', this.user);
+
+      let dataCollect = await this.$api.getCollection(loginname);
+
+      this.collection = dataCollect.data.data;
+    }
   }
 }
 </script>
 
 <style>
-.userinfo div.ivu-breadcrumb {
-  border-bottom: solid 1px #E5E5E5;
-  background-color: #F6F6F6;
-  padding: 10px;
-  border-radius: 4px 4px 0 0; 
-  -moz-border-radius: 4px 4px 0 0; 
-  -webkit-border-radius: 4px 4px 0 0;
-}
-.userinfo div.ivu-breadcrumb a:link, .userinfo div.ivu-breadcrumb a:visited {color: #80BD01;}
-.userinfo div.ivu-breadcrumb a:hover {text-decoration: underline;}
-.userinfo div.ivu-breadcrumb>span:last-child {font-weight: normal;}
-.userinfo div.ivu-breadcrumb>span:last-child .ivu-breadcrumb-item-separator {display: inline;}
-.userinfo span.ivu-breadcrumb-item-separator {
-  color: #CCC;
-  margin: 0 3px;
+.userinfo div.ivu-breadcrumb>span:last-child .ivu-breadcrumb-item-separator {
+  display: inline;
 }
 .userinfo-con {
   padding: 10px;

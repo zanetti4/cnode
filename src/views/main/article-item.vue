@@ -1,6 +1,6 @@
 <template>
   <div class="item">
-    <h3 :kind="tab" :class="{top: option.top, good: option.good}">
+    <h3 :kind="tab" :class="{'item-top': option.top, 'item-good': option.good}">
       <router-link 
       :to="{name: 'Detail', params: {id: option.id}}"
       >{{option.title}}</router-link>
@@ -121,11 +121,11 @@ export default {
 .item h3.share:before {
     background: #1abc9c;
 }
-.item h3.good:before {
+.item h3.item-good:before {
     background: #e67e22;
     color: white;
 }
-.item h3.top:before {
+.item h3.item-top:before {
     background: #80BD01;
     color: white;
 }

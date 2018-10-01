@@ -1,6 +1,6 @@
 <template>
   <section class="author">
-    <Card title="作者" :bordered="false" :dis-hover="true">
+    <Card :title="cardTit" :bordered="false" :dis-hover="true">
       <div class="demo-avatar">
         <router-link :to="{name: 'User', params: {loginname: user.loginname}}">
           <Avatar shape="square" :src="user.avatar_url" size="large" />
@@ -33,7 +33,20 @@ export default {
   },
   watch: {
     authorName(){
+      //console.log(1111111);
       this.getUserEmit();
+    }
+  },
+  computed: {
+    //卡片标题
+    cardTit(){
+      if(this.$route.name === 'Detail'){
+        //主题细览页
+        return '作者';
+      }else if(this.$route.name === 'User' || this.$route.name === 'Collections' || this.$route.name === 'Topics' || this.$route.name === 'Replies' || this.$route.name === 'Main'){
+        //用户页
+        return '个人信息';
+      }
     }
   },
   methods: {

@@ -7,6 +7,9 @@
       <Page :total="100" :current="curPage" @on-change="changePage" class-name="mainpage" />
     </Col>
     <Col span="5">
+      <author v-if="isLogin" :authorName="loginname"></author>
+      <!-- <author v-if="isLoginVuex" :authorName="loginname"></author> -->
+      <publish-btn v-if="isLogin"></publish-btn>
       <ads></ads>
       <!-- <no-reply :noReplyList="noReplyList"></no-reply> -->
       <no-reply></no-reply>
@@ -23,7 +26,11 @@ import Ads from '@/components/side/ads';
 import NoReply from '@/components/side/no-reply';
 import Friend from '@/components/side/friend';
 import Client from '@/components/side/client';
+import Author from '@/components/side/author';
+import PublishBtn from '@/components/side/publish-btn';
 import navConfig from '@/router/navConfig';
+import Cookies from 'js-cookie';
+// import { mapGetters } from 'vuex'
 
 export default {
   name: 'Main',
@@ -33,7 +40,9 @@ export default {
     Ads,
     NoReply,
     Friend,
-    Client
+    Client,
+    Author,
+    PublishBtn
   },
   data(){
     return {
@@ -52,6 +61,27 @@ export default {
   watch: {
     $route(){
       this.getTopics();
+    }
+  },
+  computed: {
+    //判断是否登录
+    isLogin(){
+      let isLogin = Cookies.get('success');
+
+      return isLogin;
+    },
+    /* isLoginVuex(){
+      //return this.$store.state.isLogin;
+      return this.$store.getters.isLoginVuex;
+    }, */
+    // ...mapGetters(['isLoginVuex']),
+    //获取登录用户名
+    loginname(){
+      let loginname = Cookies.get('loginname');
+
+      //console.log(loginname);
+
+      return loginname;
     }
   },
   methods: {
@@ -125,9 +155,3 @@ export default {
   }
 }
 </script>
-
-<style>
-.mainpage {padding: 10px;}
-.mainpage li.ivu-page-item-active, .mainpage li.ivu-page-item:hover {border-color: #80BD01;}
-.mainpage li.ivu-page-item-active a, .mainpage li.ivu-page-item-active:hover a, .mainpage li.ivu-page-item:hover a {color: #80BD01;}
-</style>
