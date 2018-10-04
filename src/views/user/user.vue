@@ -8,6 +8,7 @@
     </Col>
     <Col span="5">
       <author :authorName="loginname" v-if="loginname.length"></author>
+      <publish-btn v-if="isLogin"></publish-btn>
       <ads></ads>
       <friend></friend>
       <client></client>
@@ -23,6 +24,8 @@ import Ads from '@/components/side/ads';
 import Friend from '@/components/side/friend';
 import Client from '@/components/side/client';
 import Author from '@/components/side/author';
+import PublishBtn from '@/components/side/publish-btn';
+import Cookies from 'js-cookie';
 
 export default {
   name: 'User',
@@ -33,7 +36,8 @@ export default {
     Ads,
     Friend,
     Client,
-    Author
+    Author,
+    PublishBtn
   },
   data(){
     return {
@@ -41,6 +45,14 @@ export default {
       recentReplies: [],
       loginname: ''
     };
+  },
+  computed: {
+    //判断是否登录
+    isLogin(){
+      let isLogin = Cookies.get('success');
+
+      return isLogin;
+    }
   },
   methods: {
     //接收用户信息

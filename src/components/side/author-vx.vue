@@ -17,25 +17,26 @@
 <script>
 export default {
   name: 'Author',
-  props: {
+  /* props: {
     authorName: {
       type: String,
       default: ''
     }
-  },
+  }, */
   data(){
     return {
-      user: {}
+      user: {}/* ,
+      authorName: this.$store.state.detail.author.loginname */
     };
   },
   created(){
     this.getUserEmit();
   },
-  watch: {
+  /* watch: {
     authorName(){
       this.getUserEmit();
     }
-  },
+  }, */
   computed: {
     //卡片标题
     cardTit(){
@@ -46,6 +47,10 @@ export default {
         //用户页
         return '个人信息';
       }
+    },
+    //从 vuex 获取作者名
+    authorName(){
+      return this.$store.state.detail.author.loginname;
     }
   },
   methods: {

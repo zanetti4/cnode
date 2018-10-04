@@ -4,7 +4,6 @@ import Cookies from 'js-cookie';
 import Main from '@/views/main/main';
 import Detail from '@/views/detail/detail';
 import User from '@/views/user/user';
-import Mymes from '@/views/mymes/mymes';
 import Publish from '@/views/publish/publish';
 import topNav from '@/router/topNav';
 import userChildren from '@/router/user-children';
@@ -63,6 +62,12 @@ let router = new Router({
         {
             path: '/publish',
             name: 'Publish',
+            component: Publish,
+            meta: { isLogin: true }
+        },
+        {
+            path: '/edit',
+            name: 'Edit',
             component: Publish,
             meta: { isLogin: true }
         },

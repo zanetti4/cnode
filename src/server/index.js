@@ -61,28 +61,72 @@ export function getCollection(loginname = '') {
 }; */
 
 //验证 accessToken 的正确性
-export function validateAccess(params = {}) {
+export function validateAccess(data = {}) {
     let defaults = {
         accesstoken: ''
     };
 
-    Object.assign(defaults, params);
-
-    return instance.post('/accesstoken', {
-        params: defaults
-            /* ,
-                    headers: { 'Content-Type': 'application/json' } */
-    });
+    Object.assign(defaults, data);
+    return instance.post('/accesstoken', defaults);
 };
 
 //为评论点赞
-export function up(id = '', params = {}) {
+export function upDown(id = '', data = {}) {
     let defaults = {
         accesstoken: ''
     };
 
-    Object.assign(defaults, params);
-    return instance.post(`/reply/${id}/ups`, { params: defaults });
+    Object.assign(defaults, data);
+    return instance.post(`/reply/${id}/ups`, defaults);
+};
+
+//收藏主题
+export function collectTopic(data = {}) {
+    let defaults = {
+        accesstoken: '',
+        topic_id: ''
+    };
+
+    Object.assign(defaults, data);
+    return instance.post('/topic_collect/collect', defaults);
+};
+
+//取消收藏主题
+export function deCollectTopic(data = {}) {
+    let defaults = {
+        accesstoken: '',
+        topic_id: ''
+    };
+
+    Object.assign(defaults, data);
+    return instance.post('/topic_collect/de_collect', defaults);
+};
+
+//新建主题
+export function createTopic(data = {}) {
+    let defaults = {
+        accesstoken: '',
+        title: '',
+        tab: '',
+        content: ''
+    };
+
+    Object.assign(defaults, data);
+    return instance.post('/topics', defaults);
+};
+
+//编辑主题
+export function editTopic(data = {}) {
+    let defaults = {
+        accesstoken: '',
+        title: '',
+        tab: '',
+        content: '',
+        topic_id: ''
+    };
+
+    Object.assign(defaults, data);
+    return instance.post('/topics/update', defaults);
 };
 
 export default {
@@ -93,7 +137,11 @@ export default {
             getUser,
             getCollection,
             validateAccess,
-            up
+            upDown,
+            collectTopic,
+            deCollectTopic,
+            createTopic,
+            editTopic
         };
     }
 };

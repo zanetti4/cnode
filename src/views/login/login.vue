@@ -39,7 +39,7 @@ import Mymes from '@/views/mymes/mymes';
 import Setting from '@/views/setting/setting';
 //import topNavLogin from '@/router/topNavLogin';
 import Cookies from 'js-cookie';
-import axios from 'axios';
+//import axios from 'axios';
 
 export default {
   name: 'Login',
@@ -147,13 +147,53 @@ export default {
       this.$refs[name].validate((valid) => {
         if (valid) {
           //验证通过
-          /* this.$api.validateAccess({accesstoken: this.formData.token}).then(() => {
-            console.log(111111);
-          }, () => {
-            console.log(222222);
-          }); */
+          this.$api.validateAccess({accesstoken: this.formData.token}).then(res => {
+            //登录成功
+            let {data} = res;
 
-          axios.post('https://cnodejs.org/api/v1/accesstoken', {accesstoken: this.formData.token}).then((res) => {
+            data.accesstoken = this.formData.token;
+            //将用户信息存在 cookie 中
+            Object.keys(data).forEach(key => {
+              Cookies.set(key, data[key]);
+            });
+
+            this.$router.addRoutes([
+              {
+                  path: '/mymes',
+                  name: 'Mymes',
+                  //title: '未读消息',
+                  component: Mymes,
+                  meta: {isLogin: true}
+              },
+              {
+                  path: '/setting',
+                  name: 'Setting',
+                  //title: '设置',
+                  component: Setting,
+                  meta: {isLogin: true}
+              },
+              {
+                  path: '/signout',
+                  name: 'Signout',
+                  //title: '退出',
+                  meta: {isLogin: true}
+              }
+            ]);
+
+            let ref = this.$route.query.ref;
+
+            if(ref){
+              //有目标页
+              this.$router.push({name: ref});
+            }else{
+              //没有目标页
+              this.$router.back();
+            } 
+          }, () => {
+            this.$Message.error('登录失败!');
+          });
+
+          /* axios.post('https://cnodejs.org/api/v1/accesstoken', {accesstoken: this.formData.token}).then((res) => {
             //登录成功
             let {data} = res;
 
@@ -202,7 +242,7 @@ export default {
           }, () => {
             //console.log(222222);
             this.$Message.error('登录失败!');
-          });
+          }); */
         }
       });
     }

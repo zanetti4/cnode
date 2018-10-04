@@ -1,6 +1,6 @@
 <template>
   <div class="content-main">
-    <Spin size="large" fix v-if="spinShow"></Spin>
+    <Spin size="large" fix v-if="$store.state.spinShow"></Spin>
     <div class="main-article">
       <div v-if="true" class="panel">
         <div class="ks-clear arti-head">
@@ -15,14 +15,14 @@
             <!-- <span>最后一次编辑是 7 个月前</span> -->
             <span>来自 {{tab}}</span>
             <br />
-            <Icon type="ios-create-outline" size="22" title="编辑" v-if="isAuthor" @click="toEdit" />
+            <Icon type="ios-create-outline" size="22" title="编辑" v-if="isAuthor" />
           </Col>
           <Col span="3" offset="10" class-name="ta-r" v-if="isLogin">
             <Button type="success" class="collect" :class="{'cancel-col': info.is_collect}" @click="collect(info.id)">{{isCollect}}</Button>
           </Col>
         </Row>
         <div class="article">
-          <div v-html="info.content" class="topic_content" @click="clickImg($event)"></div>
+          <div v-html="decodeContent" class="topic_content" @click="clickImg($event)"></div>
         </div>
       </div>
     </div>
@@ -34,52 +34,39 @@
 import navConfig from '@/router/navConfig';
 import BigImg from './big-img';
 import Cookies from 'js-cookie';
-//import axios from 'axios';
 
 export default {
-  name: 'CnodeArticle',
+  name: 'CnodeArticleVx',
   data(){
     return {
-      info: {},
-      spinShow: true,
       isRenderBig: false,
       imgSrc: '',
-      topImg: 0,
-      //反转义表
-      HTML_DECODE: {
-        "&lt;"  : "<", 
-        "&gt;"  : ">"
-      }
+      topImg: 0
     };
   },
   components: {BigImg},
   created(){
-    this.getDetailEmitName();
+    this.getDetailVuex();
   },
   mounted(){
-    /* this.$nextTick(() => {
-      let links = document.querySelector('.topic_content').querySelectorAll('a');
-
-      links.forEach(item => {
-        item.target = '_blank';
-        //item.setAttribute('target', '_blank');
-      });
-    }); */
-
     setTimeout(() => {
       //给文章内所有链接设置在新选项卡打开
       let links = document.querySelector('.topic_content').querySelectorAll('a');
 
       links.forEach(item => {
         item.target = '_blank';
-        //item.setAttribute('target', '_blank');
       });
     }, 1000);
   },
   watch: {
     $route(){
-      this.getDetailEmitName();
-    }
+      this.getDetailVuex();
+    }/* ,
+    info(){
+      this.spinShow = false;
+      this.$emit('get-user', this.info.author.loginname);
+      this.$emit('get-replies', this.info.replies);
+    } */
   },
   computed: {
     //创建时间
@@ -98,8 +85,6 @@ export default {
     //获取作者名
     authorName(){
       //下面这行执行了两次，所以要先确保有值，再进行操作。
-      //console.log(this.info.author);
-
       if(this.info.author){
         return this.info.author.loginname;
       }
@@ -134,6 +119,14 @@ export default {
       if(this.info.author){
         return this.info.author.loginname === myLoginname ? true : false;
       }
+    },
+    //从 vuex 获取反转义后的内容
+    decodeContent(){
+      return this.$store.getters.decodeContent;
+    },
+    //从 vuex 获取细览
+    info(){
+      return this.$store.state.detail;
     }
   },
   methods: {
@@ -143,65 +136,20 @@ export default {
 
       return `${ct.getFullYear()}年${ct.getMonth()+1}月${ct.getDate()}日`;
     },
-    //获取文章细览及向上传递作者名、回复
-    async getDetailEmitName(){
+    //通知 vuex 获取文章细览及向上传递作者名、回复
+    getDetailVuex(){
+      this.$store.commit('showSpinMu', {show: true});
+
       let id = this.$route.params.id;
       let accesstoken = Cookies.get('accesstoken');
-      let data = {};
-
-      this.spinShow = true;
-
-      //let {data} = await this.$api.getDetail(id);
 
       if(accesstoken){
         //登录了
-        data = await this.$api.getDetail(id, {accesstoken});
+        this.$store.dispatch('getDetailAc', {id, accesstoken});
       }else{
         //没登录
-        data = await this.$api.getDetail(id);
+        this.$store.dispatch('getDetailAc', {id});
       }
-
-      //this.info = data.data;
-      this.info = data.data.data;
-      //console.log(this.info.content);
-
-      //HTML反转义
-      /* function HTMLDecode(text) { 
-        var temp = document.createElement("div"); 
-
-        temp.innerHTML = text; 
-
-        var output = temp.innerText || temp.textContent; 
-
-        temp = null; 
-        return output; 
-      } 
-
-      this.info.content = HTMLDecode(this.info.content); */
-
-      let REGX_HTML_DECODE = /&\w+;/g;
-      let that = this;
-
-      //反转义
-      function decodeHtml(s){
-        return s.replace(REGX_HTML_DECODE, function($0){
-          let c = that.HTML_DECODE[$0];
-
-          //console.log(c);
-
-          if(c === undefined){
-            //反转义表中没有
-            c = $0;
-          }
-
-          return c;
-        });
-      };
-
-      this.info.content = decodeHtml(this.info.content);
-      this.spinShow = false;
-      this.$emit('get-user', this.info.author.loginname);
-      this.$emit('get-replies', this.info.replies);
     },
     //放大图片
     clickImg(e) {
@@ -232,16 +180,6 @@ export default {
         });
       }else{
         //收藏
-        /* axios.post('https://cnodejs.org/api/v1/topic_collect/collect', {
-          accesstoken,
-          topic_id: id
-          }).then(res => {
-          //console.log(res.data);
-          this.info.is_collect = true;
-        }, error => {
-          console.log(error);
-        }); */
-
         this.$api.collectTopic({
           accesstoken,
           topic_id: id
@@ -251,15 +189,6 @@ export default {
           console.log(error);
         });
       }
-    },
-    //跳转至编辑页面
-    toEdit(){
-      this.$router.push({
-        name: 'Edit',
-        params: {
-          detailInfo: this.info
-        }
-      });
     }
   }
 }

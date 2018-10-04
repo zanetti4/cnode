@@ -27,7 +27,7 @@
 <script>
 import UEditor from '@/components/ueditor/ueditor.vue';
 import Cookies from 'js-cookie';
-import axios from 'axios';
+//import axios from 'axios';
 
 export default {
   name: 'PubCard',
@@ -59,13 +59,29 @@ export default {
           { required: true, message: '请输入标题', trigger: 'blur' },
           { type: 'string', min: 10, message: '标题十个字及以上', trigger: 'blur' }
         ]
-      }
+      },
+      submitKind: ''
     };
+  },
+  created(){
+    if(this.$route.name === 'Publish'){
+      //发布话题
+      this.submitKind = 'publish';
+      this.formData.title = '';
+    }else if(this.$route.name === 'Edit'){
+      //编辑话题
+      //console.log(this.$route.params.detailInfo);
+      this.submitKind = 'edit';
+      this.formData.title = this.$route.params.detailInfo.title;
+      this.formData.tab = this.$route.params.detailInfo.tab;
+      this.config.autoClearinitialContent = false;
+      this.config.initialContent = this.$route.params.detailInfo.content;
+    }
   },
   methods: {
     //提交
     publish(name){
-      this.$refs[name].validate((valid) => {
+      this.$refs[name].validate(async valid => {
         if (valid) {
           //验证通过
           let editor = this.$refs.ueditor;
@@ -77,15 +93,47 @@ export default {
           if(content.length){
             //有内容
             let accesstoken = Cookies.get('accesstoken');
-
-            axios.post('https://cnodejs.org/api/v1/topics', {
+            let data = {
               accesstoken,
               title: this.formData.title,
               tab: this.formData.tab,
               content
-            }).then(res => {
-              this.$router.push({name: 'Detail', params: {id: res.data.topic_id}});
-            });
+            };
+
+            let res = {};
+
+            if(this.submitKind === 'publish'){
+              //发布话题
+              /* axios.post('https://cnodejs.org/api/v1/topics', {
+                accesstoken,
+                title: this.formData.title,
+                tab: this.formData.tab,
+                content
+              }).then(res => {
+                this.$router.push({name: 'Detail', params: {id: res.data.topic_id}});
+              }); */
+
+              /* this.$api.createTopic(data).then(res => {
+                this.$router.push({name: 'Detail', params: {id: res.data.topic_id}});
+              }); */
+
+              res = await this.$api.createTopic(data);
+            }else{
+              //编辑话题
+              /* this.$api.editTopic({
+                ...data,
+                topic_id: this.$route.params.detailInfo.id
+              }).then(res => {
+                this.$router.push({name: 'Detail', params: {id: res.data.topic_id}});
+              }); */
+
+              res = await this.$api.editTopic({
+                ...data,
+                topic_id: this.$route.params.detailInfo.id
+              });
+            }
+
+            this.$router.push({name: 'Detail', params: {id: res.data.topic_id}});
           }else{
             //没内容
             editor.UEFocus();

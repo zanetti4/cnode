@@ -93,8 +93,16 @@ export default {
         //登录了
         let myId = Cookies.get('id');
 
-        axios.post(`https://cnodejs.org/api/v1/reply/${id}/ups`, {accesstoken}).then((res) => {
+        /* axios.post(`https://cnodejs.org/api/v1/reply/${id}/ups`, {accesstoken}).then((res) => {
           //console.log(res.data);
+          this.$emit('up-to-detail', {
+            id,
+            action: res.data.action,
+            myId
+          });
+        }); */
+
+        this.$api.upDown(id, {accesstoken}).then(res => {
           this.$emit('up-to-detail', {
             id,
             action: res.data.action,
