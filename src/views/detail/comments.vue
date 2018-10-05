@@ -15,9 +15,10 @@
                   {{item.author.loginname}}
                 </router-link>
                 <span>{{index + 1}}楼•{{replyTime(item.create_at)}}</span>
+                <span class="comments-row-nft-author" v-if="isAuthor(item.author.loginname)">作者</span>
               </Col>
               <Col span="2" class-name="comments-row-up">
-                <Icon type="ios-thumbs-up-outline" size="18" @click="up(item.id)" :class="{'ivu-icon-ios-thumbs-up': item.is_uped}" /> {{item.ups.length}}
+                <Icon type="ios-thumbs-up-outline" size="18" @click="up(item.id, item.author.loginname)" :class="{'ivu-icon-ios-thumbs-up': item.is_uped}" /> {{item.ups.length}}
               </Col>
             </Row>
             <p v-html="item.content" class="comments-row-con"></p>
@@ -86,12 +87,13 @@ export default {
       };
     },
     //点赞
-    up(id){
+    up(id, loginname){
       let accesstoken = Cookies.get('accesstoken');
       
       if(accesstoken){
         //登录了
         let myId = Cookies.get('id');
+        let myLoginname = Cookies.get('loginname');
 
         /* axios.post(`https://cnodejs.org/api/v1/reply/${id}/ups`, {accesstoken}).then((res) => {
           //console.log(res.data);
@@ -102,13 +104,21 @@ export default {
           });
         }); */
 
-        this.$api.upDown(id, {accesstoken}).then(res => {
-          this.$emit('up-to-detail', {
-            id,
-            action: res.data.action,
-            myId
+        if(myLoginname === loginname){
+          //给自己点赞
+          alert('呵呵，不能帮自己点赞。');
+        }else{
+          //给别人点赞
+          this.$api.upDown(id, {accesstoken}).then(res => {
+            this.$emit('up-to-detail', {
+              id,
+              action: res.data.action,
+              myId
+            });
+          }, error => {
+            console.log(error);
           });
-        });
+        }
       }else{
         //没登录
         alert('请先登录，登录后即可点赞。');
@@ -127,6 +137,12 @@ export default {
         alert('请先登录，登录后即可点赞。');
       }
     } */
+    //是不是作者
+    isAuthor(loginname){
+      let myLoginname = Cookies.get('loginname');
+
+      return myLoginname === loginname ? true : false;
+    }
   }
 }
 </script>
@@ -150,6 +166,12 @@ export default {
 }
 .comments-row-nft a:hover {text-decoration: underline;}
 .comments-row-nft span {font-size: 12px;}
+.comments-row-nft span.comments-row-nft-author {
+  color: white;
+  background-color: #80BD01;
+  padding: 0 3px;
+  display: inline-block;
+}
 .comments-row-up i {
   vertical-align: middle;
   cursor: pointer;
