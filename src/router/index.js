@@ -7,6 +7,8 @@ import User from '@/views/user/user';
 import Publish from '@/views/publish/publish';
 import topNav from '@/router/topNav';
 import userChildren from '@/router/user-children';
+import Mymes from '@/views/mymes/mymes';
+import Setting from '@/views/setting/setting';
 
 Vue.use(Router);
 
@@ -79,6 +81,26 @@ let router = new Router({
                 scrollToTop: true
             },
             children: [...userChildren]
+        },
+        {
+            path: '/mymes',
+            name: 'Mymes',
+            //title: '未读消息',
+            component: Mymes,
+            meta: { isLogin: true }
+        },
+        {
+            path: '/setting',
+            name: 'Setting',
+            //title: '设置',
+            component: Setting,
+            meta: { isLogin: true }
+        },
+        {
+            path: '/signout',
+            name: 'Signout',
+            //title: '退出',
+            meta: { isLogin: true }
         },
         /* {
             path: '/login',

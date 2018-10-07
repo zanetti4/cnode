@@ -5,9 +5,11 @@
 </template>
 
 <script>
+  // import '../../../static/ueditor/third-party/zeroclipboard/ZeroClipboard.js';
   import '../../../static/ueditor/ueditor.config.js'
   import '../../../static/ueditor/ueditor.all.js'
   import '../../../static/ueditor/lang/zh-cn/zh-cn.js'
+  // import '../../../static/ueditor/ueditor.parse.min.js';
 
   export default {
     name: "UEditor",

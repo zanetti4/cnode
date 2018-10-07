@@ -35,8 +35,8 @@
 
 <script>
 import About from './about';
-import Mymes from '@/views/mymes/mymes';
-import Setting from '@/views/setting/setting';
+/* import Mymes from '@/views/mymes/mymes';
+import Setting from '@/views/setting/setting'; */
 //import topNavLogin from '@/router/topNavLogin';
 import Cookies from 'js-cookie';
 //import axios from 'axios';
@@ -157,7 +157,7 @@ export default {
               Cookies.set(key, data[key]);
             });
 
-            this.$router.addRoutes([
+            /* this.$router.addRoutes([
               {
                   path: '/mymes',
                   name: 'Mymes',
@@ -178,7 +178,7 @@ export default {
                   //title: '退出',
                   meta: {isLogin: true}
               }
-            ]);
+            ]); */
 
             let ref = this.$route.query.ref;
 

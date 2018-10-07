@@ -42,7 +42,7 @@ export default {
       if(this.$route.name === 'Detail'){
         //主题细览页
         return '作者';
-      }else if(this.$route.name === 'User' || this.$route.name === 'Collections' || this.$route.name === 'Topics' || this.$route.name === 'Replies' || this.$route.name === 'Main'){
+      }else if(this.$route.name === 'User' || this.$route.name === 'Collections' || this.$route.name === 'Topics' || this.$route.name === 'Replies' || this.$route.name === 'Main' || this.$route.name === 'Mymes'){
         //用户页
         return '个人信息';
       }

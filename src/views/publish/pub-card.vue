@@ -17,9 +17,7 @@
         <Input element-id="title" v-model="formData.title" placeholder="十个字及以上"></Input>
       </FormItem>
       <UEditor :config="config" ref="ueditor"></UEditor>
-      <FormItem>
-        <Button type="primary" html-type="submit">提交</Button>
-      </FormItem>
+      <Button type="primary" html-type="submit">提交</Button>
     </Form>
   </section>
 </template>

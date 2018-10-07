@@ -129,6 +129,37 @@ export function editTopic(data = {}) {
     return instance.post('/topics/update', defaults);
 };
 
+//新建评论
+export function reply(topicId, data = {}) {
+    let defaults = {
+        accesstoken: '',
+        content: ''
+    };
+
+    Object.assign(defaults, data);
+    return instance.post(`/topic/${topicId}/replies`, defaults);
+};
+
+//获取未读消息数
+export function getMesCount(params = {}) {
+    let defaults = {
+        accesstoken: ''
+    };
+
+    Object.assign(defaults, params);
+    return instance.get('/message/count', { params: defaults });
+};
+
+//获取已读和未读消息
+export function getMessages(params = {}) {
+    let defaults = {
+        accesstoken: ''
+    };
+
+    Object.assign(defaults, params);
+    return instance.get('/messages', { params: defaults });
+};
+
 export default {
     install(vue) {
         vue.prototype.$api = {
@@ -141,7 +172,10 @@ export default {
             collectTopic,
             deCollectTopic,
             createTopic,
-            editTopic
+            editTopic,
+            reply,
+            getMesCount,
+            getMessages
         };
     }
 };

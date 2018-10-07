@@ -3,6 +3,7 @@
     <Col span="16" class-name="leftcol" :style="{padding: 0}">
       <cnode-article @get-user="getUserDe" @get-replies="getRepliesDe"></cnode-article>
       <comments :allReplies="replies" @up-to-detail="upDetail"></comments>
+      <reply v-if="false"></reply>
     </Col>
     <Col span="5">
       <author :authorName="loginname" v-if="loginname.length" @user-to-detail="otherTopics"></author>
@@ -16,6 +17,7 @@
 <script>
 import CnodeArticle from './cnode-article';
 import Comments from './comments';
+import Reply from './reply';
 import Ads from '@/components/side/ads';
 import NoReply from '@/components/side/no-reply';
 import Author from '@/components/side/author';
@@ -29,7 +31,8 @@ export default {
     NoReply,
     Author,
     Others,
-    Comments
+    Comments,
+    Reply
   },
   data(){
     return {
