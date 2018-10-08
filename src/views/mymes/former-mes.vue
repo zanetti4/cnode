@@ -1,13 +1,9 @@
 <template>
   <section class="recentto">
-    <Card :bordered="false" :dis-hover="true">
-      <Breadcrumb slot="title" class="collec-bread">
-        <BreadcrumbItem to="/">主页</BreadcrumbItem>
-        <BreadcrumbItem>新消息</BreadcrumbItem>
-      </Breadcrumb>
+    <Card title="过往信息" :bordered="false" :dis-hover="true">
       <Spin size="large" fix v-if="spinShow"></Spin>
-      <CellGroup v-if="hasNotRead.length">
-        <div class="newmes-item" v-for="message in curNotRead" :key="message.id">
+      <CellGroup v-if="hasReadMes.length">
+        <div class="newmes-item" v-for="message in curHasRead" :key="message.id">
           <router-link 
           :to="{name: 'User', params: {loginname: message.author.loginname}}"
           >{{message.author.loginname}}</router-link> 回复了你的话题 <router-link 
@@ -15,7 +11,7 @@
           >{{message.topic.title}}</router-link>
         </div>
       </CellGroup>
-      <Page v-if="hasNotRead.length" :total="hasNotRead.length" :current="curPage" @on-change="changePage" :page-size="pageSize" class-name="mainpage" />
+      <Page v-if="hasReadMes.length" :total="hasReadMes.length" :current="curPage" @on-change="changePage" :page-size="pageSize" class-name="mainpage" />
       <div v-else class="newmes-none">无消息</div>
     </Card>
   </section>
@@ -23,9 +19,9 @@
 
 <script>
 export default {
-  name: 'NewMes',
+  name: 'FormerMes',
   props: {
-    hasNotRead: {
+    hasReadMes: {
       type: Array,
       default(){
         return [];
@@ -35,12 +31,12 @@ export default {
   data(){
     return {
       curpage: 1,
-      curNotRead: [],
+      curHasRead: [],
       spinShow: true
     };
   },
   watch: {
-    hasNotRead: 'showCurCon'
+    hasReadMes: 'showCurCon'
   },
   created(){
     /* this.spinShow = true;
@@ -54,7 +50,7 @@ export default {
 
     this.curPage = +page;
 
-    let maxPage = Math.ceil(this.hasNotRead.length/this.pageSize);
+    let maxPage = Math.ceil(this.hasReadMes.length/this.pageSize);
 
     if(page > maxPage){
       //page 超出最大页数
@@ -69,7 +65,8 @@ export default {
 
     let start = (page - 1) * this.pageSize;
 
-    this.curNotRead = this.hasNotRead.slice(start, start + this.pageSize);
+    this.curHasRead = this.hasReadMes.slice(start, start + this.pageSize);
+    // console.log(this.curHasRead);
     this.spinShow = false; */
   },
   computed: {
@@ -96,7 +93,7 @@ export default {
       
       let start = (page - 1) * this.pageSize;
 
-      this.curNotRead = this.hasNotRead.slice(start, start + this.pageSize);
+      this.curHasRead = this.hasReadMes.slice(start, start + this.pageSize);
       this.spinShow = false;
     },
     //截取本页内容
@@ -112,7 +109,7 @@ export default {
 
       this.curPage = +page;
 
-      let maxPage = Math.ceil(this.hasNotRead.length/this.pageSize);
+      let maxPage = Math.ceil(this.hasReadMes.length/this.pageSize);
 
       if(page > maxPage){
         //page 超出最大页数
@@ -127,22 +124,10 @@ export default {
 
       let start = (page - 1) * this.pageSize;
 
-      this.curNotRead = this.hasNotRead.slice(start, start + this.pageSize);
+      this.curHasRead = this.hasReadMes.slice(start, start + this.pageSize);
+      // console.log(this.curHasRead);
       this.spinShow = false;
     }
   }
 }
 </script>
-
-<style>
-.newmes-item {
-  padding: 10px;
-  border-bottom: solid 1px #E5E5E5;
-}
-.newmes-item a:link, .newmes-item a:visited {color: #08C;}
-.newmes-item a:hover {text-decoration: underline;}
-.newmes-none {
-  padding-left: 10px;
-  line-height: 4;
-}
-</style>

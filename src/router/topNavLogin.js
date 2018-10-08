@@ -9,7 +9,7 @@ let topNavLogin = [{
         name: 'Mymes',
         title: '未读消息'
     },
-    {
+    /* {
         path: '/newcomer',
         name: 'Newcomer',
         title: '新手入门'
@@ -33,7 +33,7 @@ let topNavLogin = [{
         path: '/signout',
         name: 'Signout',
         title: '退出'
-    }
+    } */
 ];
 
 export default topNavLogin;

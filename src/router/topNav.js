@@ -6,7 +6,7 @@ let topNav = [{
         title: '首页',
         redirect: '/main/all'
     },
-    {
+    /* {
         path: '/newcomer',
         name: 'Newcomer',
         title: '新手入门'
@@ -25,7 +25,7 @@ let topNav = [{
         path: '/signup',
         name: 'Signup',
         title: '注册'
-    },
+    }, */
     {
         path: '/login',
         name: 'Login',

@@ -1,6 +1,6 @@
 <template>
   <Header :style="{padding: 0}">
-    <Menu mode="horizontal" theme="dark" :style="{'background-color': 'transparent'}">
+    <Menu mode="horizontal" theme="dark" :active-name="activeName" :style="{'background-color': 'transparent'}">
       <Row type="flex" justify="center">
         <Col span="7">
           <router-link :to="{name: 'Home'}">
@@ -43,7 +43,8 @@ export default {
       topNavLogin,
       whichOne: [],
       mesCount: 0,
-      myToken: ''
+      myToken: '',
+      activeName: -1
     };
   },
   /* beforeRouteEnter(to, from, next){
@@ -157,21 +158,68 @@ export default {
     whichTopNav(){
       //let userName = Cookies.get('cnode-user');
       let isLogin = Cookies.get('success');
+      let name = this.$route.name;
+      let index = -1;
       
       if(isLogin){
         //登录了
         this.whichOne = this.topNavLogin;
 
+        index = this.topNavLogin.findIndex(obj => {
+          if(name === 'Main'){
+            //首页
+            return obj.name === 'Home';
+          }else{
+            //不是首页
+            return obj.name === name;
+          }
+        });
+
+        // console.log(`登录了：${name}，${index}`);
+
         this.$nextTick(() => {
           let headNav = document.querySelector('.headnav');
 
-          // console.log(headNav);
           headNav.className = 'ivu-col ivu-col-span-9 ivu-col-offset-5 headnav';
         });
       }else{
         //没登录
         this.whichOne = this.topNav;
+
+        index = this.topNav.findIndex(obj => {
+          if(name === 'Main'){
+            //首页
+            return obj.name === 'Home';
+          }else{
+            //不是首页
+            return obj.name === name;
+          }
+        });
+
+        // console.log(`没登录：${name}，${index}`);
+
+        /* let name = this.$route.name;
+
+        let index = this.topNav.findIndex(obj => {
+          if(name === 'Main'){
+            //首页
+            return obj.name === 'Home';
+          }else{
+            //不是首页
+            return obj.name === name;
+          }
+        });
+
+        if(index !== -1){
+          //找到了对应的路由对象
+          this.activeName = index;
+        }else{
+          //没找到了对应的路由对象
+          this.activeName = -1;
+        } */
       }
+
+      this.activeName = index;
     },
     //判断是否是未读消息
     isMymes(name){

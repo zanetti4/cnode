@@ -8,7 +8,7 @@
         <Avatar shape="square" :src="user.avatar_url" size="large" /><span class="userinfo-con-name">{{user.loginname}}</span>
       </div>
       <div>{{user.score}} 积分</div>
-      <router-link :to="{name: 'Collections'}">{{collection.length}}个话题收藏</router-link>
+      <router-link :to="{name: 'Collections'}" v-if="collection.length">{{collection.length}}个话题收藏</router-link>
       <div class="userinfo-con-time">
         注册时间 {{signUp}}
       </div>
