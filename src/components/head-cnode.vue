@@ -20,8 +20,8 @@
           <!-- <div class="ks-clear">
             <MenuItem :name="index" v-for="(item, index) in topNav" :key="item.path" :to="{name: item.name}">{{item.title}}</MenuItem>
           </div> -->
-          <div class="ks-clear head-menu">
-            <MenuItem :name="index" v-for="(item, index) in whichOne" :key="item.path" :to="{name: item.name}" :class="{'badge': isMymes(item.name)}">{{item.title}}</MenuItem>
+          <div class="ks-clear head-menu" @click="signOut">
+            <MenuItem :name="index" v-for="(item, index) in whichOne" :key="item.path" :to="{name: item.name}" :class="{'badge': isMymes(item.name), 'head-menu-out': isOut(item.name)}">{{item.title}}</MenuItem>
           </div>
           <!-- {{whichOne}} -->
         </Col>
@@ -42,7 +42,7 @@ export default {
       topNav,
       topNavLogin,
       whichOne: [],
-      mesCount: 0,
+      // mesCount: 0,
       myToken: '',
       activeName: -1
     };
@@ -125,6 +125,14 @@ export default {
         return true;
       }
     } */
+    //从 vuex 获取未读消息数
+    mesCount(){
+      return this.$store.state.notReadCount;
+    },
+    //从 vuex 获取我的信息字段
+    myInfoKeys(){
+      return this.$store.state.myInfo;
+    }
   },
   methods: {
     //顶部导航显示项
@@ -225,6 +233,10 @@ export default {
     isMymes(name){
       return name === 'Mymes' ? true : false;
     },
+    //判断是否是退出
+    isOut(name){
+      return name === 'Signout' ? true : false;
+    },
     //获取未读消息数
     async messageCount(){
       let accesstoken = Cookies.get('accesstoken');
@@ -233,23 +245,50 @@ export default {
 
       if(this.myToken){
         //登录了
-        // console.log(111111111111);
-        let {data} = await this.$api.getMesCount({accesstoken});
+        this.$store.dispatch('getNotReadAc', {accesstoken});
 
-        this.mesCount = data.data;
+        /* let {data} = await this.$api.getMesCount({accesstoken});
 
-        let myMes = document.querySelector('.badge');
+        this.mesCount = data.data; */
 
-        if(this.mesCount !== 0){
-          //有未读消息
-          myMes.setAttribute('mesCount', this.mesCount);
+        setTimeout(() => {
+          if(this.mesCount !== 0){
+            //有未读消息
+            this.$nextTick(() => {
+              let myMes = document.querySelector('.badge');
+            
+              myMes.setAttribute('mesCount', this.mesCount);
 
-          this.$nextTick(() => {
-            let headNav = document.querySelector('.headnav');
+              let headNav = document.querySelector('.headnav');
 
-            headNav.className = 'ivu-col ivu-col-span-10 ivu-col-offset-5 headnav';
-          });
-        }
+              headNav.className = 'ivu-col ivu-col-span-10 ivu-col-offset-5 headnav';
+            });
+          }else{
+            //没有未读消息
+            this.$nextTick(() => {
+              let myMes = document.querySelector('.badge');
+
+              myMes.removeAttribute('mesCount');
+
+              let headNav = document.querySelector('.headnav');
+
+              headNav.className = 'ivu-col ivu-col-span-9 ivu-col-offset-5 headnav';
+            });
+          }
+        }, 120);
+      }
+    },
+    //退出
+    signOut(e){
+      /* console.log(e.target);
+      console.log(e.target.className); */
+      let classIndex = e.target.className.indexOf('head-menu-out');
+
+      if(e.target.nodeName === 'A' && classIndex !== -1){
+        //点的是退出
+        this.myInfoKeys.forEach(myField => {
+          Cookies.remove(myField);
+        });
       }
     }
   }

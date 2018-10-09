@@ -22,6 +22,8 @@
 </template>
 
 <script>
+import Cookies from 'js-cookie';
+
 export default {
   name: 'NewMes',
   props: {
@@ -71,11 +73,21 @@ export default {
 
     this.curNotRead = this.hasNotRead.slice(start, start + this.pageSize);
     this.spinShow = false; */
+    if(this.mesCount !== 0){
+      //有未读消息
+      let accesstoken = Cookies.get('accesstoken');
+
+      this.$store.dispatch('markAllAc', {accesstoken});
+    }
   },
   computed: {
     //每页显示条数
     pageSize(){
       return 10;
+    },
+    //从 vuex 获取未读消息数
+    mesCount(){
+      return this.$store.state.notReadCount;
     }
   },
   methods: {

@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import { getTopics, getDetail } from '@/server';
+import { getTopics, getDetail, getMesCount, markAll } from '@/server';
 
 Vue.use(Vuex);
 
@@ -10,7 +10,9 @@ let store = new Vuex.Store({
         spinShow: true,
         noReplyList: [],
         isLogin: false,
-        detail: {}
+        detail: {},
+        notReadCount: 0,
+        myInfo: []
     },
     getters: {
         //登录状态
@@ -66,6 +68,18 @@ let store = new Vuex.Store({
             return getDetail(payload.id, { accesstoken }).then(({ data }) => {
                 store.commit('detailMu', { detail: data.data });
             });
+        },
+        //获取未读消息数
+        getNotReadAc(store, payload) {
+            return getMesCount(payload).then(({ data }) => {
+                store.commit('notReadMu', { count: data.data });
+            });
+        },
+        //标记全部消息为已读
+        markAllAc(store, payload) {
+            return markAll(payload).then(() => {
+                store.commit('clearNotReadMu');
+            });
         }
     },
     mutations: {
@@ -110,6 +124,18 @@ let store = new Vuex.Store({
                     reply.is_uped = false;
                 }
             }
+        },
+        //未读消息数
+        notReadMu(state, payload) {
+            state.notReadCount = payload.count;
+        },
+        //未读消息数归零
+        clearNotReadMu(state) {
+            state.notReadCount = 0;
+        },
+        //我的信息字段
+        myInfoMu(state, payload) {
+            state.myInfo = payload.info;
         }
     }
 });

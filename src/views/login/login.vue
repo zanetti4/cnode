@@ -153,9 +153,13 @@ export default {
 
             data.accesstoken = this.formData.token;
             //将用户信息存在 cookie 中
-            Object.keys(data).forEach(key => {
+            let aKeys = Object.keys(data);
+
+            aKeys.forEach(key => {
               Cookies.set(key, data[key]);
             });
+
+            this.$store.commit('myInfoMu', {info: aKeys});
 
             /* this.$router.addRoutes([
               {

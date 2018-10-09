@@ -160,6 +160,16 @@ export function getMessages(params = {}) {
     return instance.get('/messages', { params: defaults });
 };
 
+//标记全部已读
+export function markAll(data = {}) {
+    let defaults = {
+        accesstoken: ''
+    };
+
+    Object.assign(defaults, data);
+    return instance.post('/message/mark_all', defaults);
+};
+
 export default {
     install(vue) {
         vue.prototype.$api = {
@@ -175,7 +185,8 @@ export default {
             editTopic,
             reply,
             getMesCount,
-            getMessages
+            getMessages,
+            markAll
         };
     }
 };

@@ -28,12 +28,12 @@ let topNavLogin = [{
         path: '/setting',
         name: 'Setting',
         title: '设置'
-    },
+    },*/
     {
         path: '/signout',
         name: 'Signout',
         title: '退出'
-    } */
+    }
 ];
 
 export default topNavLogin;
