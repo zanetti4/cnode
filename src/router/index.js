@@ -68,7 +68,8 @@ let router = new Router({
             meta: { isLogin: true }
         },
         {
-            path: '/edit',
+            // path: '/edit',
+            path: '/edit/:topicId',
             name: 'Edit',
             component: Publish,
             meta: { isLogin: true }
@@ -100,7 +101,24 @@ let router = new Router({
             path: '/signout',
             name: 'Signout',
             //title: '退出',
-            meta: { isLogin: true }
+            meta: { isLogin: true },
+            beforeEnter: (to, from, next) => {
+                if (from.matched.some(item => item.meta.isLogin)) {
+                    //点退出时浏览的页面需要登录
+                    next({
+                        path: '/main/all'
+                    });
+                } else {
+                    //点退出时浏览的页面不需要登录
+                    // console.log(222222);
+
+                    next({
+                        name: from.name,
+                        params: from.params,
+                        query: from.query
+                    });
+                }
+            }
         },
         /* {
             path: '/login',

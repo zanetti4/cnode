@@ -21,8 +21,9 @@
             <Button type="success" class="collect" :class="{'cancel-col': info.is_collect}" @click="collect(info.id)">{{isCollect}}</Button>
           </Col>
         </Row>
-        <div class="article">
-          <div v-html="info.content" class="topic_content" @click="clickImg($event)"></div>
+        <div class="article" @click="clickImg($event)">
+          <!-- <div v-html="info.content" class="topic_content" @click="clickImg($event)"></div> -->
+          <vue-markdown class="topic_content" :source="info.content"></vue-markdown>
         </div>
       </div>
     </div>
@@ -34,6 +35,7 @@
 import navConfig from '@/router/navConfig';
 import BigImg from './big-img';
 import Cookies from 'js-cookie';
+import VueMarkdown from 'vue-markdown';
 //import axios from 'axios';
 
 export default {
@@ -52,7 +54,7 @@ export default {
       }
     };
   },
-  components: {BigImg},
+  components: {BigImg, VueMarkdown},
   created(){
     this.getDetailEmitName();
   },
@@ -155,10 +157,13 @@ export default {
 
       if(accesstoken){
         //登录了
-        data = await this.$api.getDetail(id, {accesstoken});
+        data = await this.$api.getDetail(id, {
+          accesstoken,
+          mdrender: false
+        });
       }else{
         //没登录
-        data = await this.$api.getDetail(id);
+        data = await this.$api.getDetail(id, {mdrender: false});
       }
 
       //this.info = data.data;
@@ -256,8 +261,12 @@ export default {
     toEdit(){
       this.$router.push({
         name: 'Edit',
-        params: {
+        /* params: {
           detailInfo: this.info
+        } */
+        params: {
+          detailInfo: this.info,
+          topicId: this.info.id
         }
       });
     }
@@ -328,7 +337,7 @@ export default {
   border-top: solid 1px #E5E5E5;
 }
 
-.markdown-text p,.preview p {
+.markdown-text p,.preview p, .topic_content p {
 	white-space: pre-wrap;
 	white-space: -moz-pre-wrap;
 	white-space: -pre-wrap;
@@ -339,20 +348,20 @@ export default {
   font-size: 18px;
 }
 
-.markdown-text>:last-child,.preview>:last-child,textarea#title {
+.markdown-text>:last-child,.preview>:last-child,textarea#title, .topic_content>:last-child {
 	margin-bottom: 1em;
 }
 
-.markdown-text>:first-child,.preview>:first-child {
+.markdown-text>:first-child,.preview>:first-child, .topic_content>:first-child {
 	margin-top: 0;
 }
 
-.markdown-text li,.preview li {
+.markdown-text li,.preview li, .topic_content li {
 	font-size: 14px;
 	line-height: 2em;
 }
 
-.markdown-text li code,.markdown-text p code,.preview li code,.preview p code {
+.markdown-text li code,.markdown-text p code,.preview li code,.preview p code, .topic_content li code, .topic_content p code {
 	color: #000;
 	background-color: #fcfafa;
 	padding: 4px 6px;
@@ -362,12 +371,12 @@ export default {
 	cursor: pointer;
 } */
 
-.markdown-text h1 code,.markdown-text h2 code,.markdown-text h3 code,.markdown-text h4 code,.markdown-text h5 code,.markdown-text h6 code {
+.markdown-text h1 code,.markdown-text h2 code,.markdown-text h3 code,.markdown-text h4 code,.markdown-text h5 code,.markdown-text h6 code, .topic_content h1 code,.topic_content h2 code,.topic_content h3 code,.topic_content h4 code,.topic_content h5 code,.topic_content h6 code {
 	font-size: inherit;
 	color: inherit;
 }
 
-.panel .markdown-text a {
+.panel .markdown-text a, .panel .topic_content a {
 	color: #08c;
 }
 
@@ -394,8 +403,8 @@ blockquote{padding:0 0 0 15px;margin:0 0 20px;border-left:5px solid #eee}
 blockquote p{font-size:17.5px;font-weight:300;line-height:1.25}
 blockquote small{color:#999}blockquote small:before{content:'\2014 \00A0'}blockquote.pull-right{float:right;padding-right:15px;padding-left:0;border-right:5px solid #eee;border-left:0}blockquote.pull-right p,blockquote.pull-right small{text-align:right}blockquote.pull-right small:before{content:''}blockquote.pull-right small:after{content:'\00A0 \2014'}blockquote:after,blockquote:before,q:after,q:before{content:""}
 .preview p,.reply_content p,.reply_form p,.topic_content p{font-size:15px;line-height:1.7em;overflow:auto}
-.panel .markdown-text a:link, .panel .markdown-text a:visited {color: #08C;}
-.panel .markdown-text a:hover {text-decoration: underline;}
+.panel .markdown-text a:link, .panel .markdown-text a:visited, .panel .topic_content a:link, .panel .topic_content a:visited {color: #08C;}
+.panel .markdown-text a:hover, .panel .topic_content a:hover {text-decoration: underline;}
 .topic_content h2 {font-size: 26px;}
 .preview h1, .preview h2, .preview h3, .preview h4, .preview h5, .preview h6, .reply_area h1, .reply_area h2, .reply_area h3, .reply_area h4, .reply_area h5, .reply_area h6, .topic_content h1, .topic_content h2, .topic_content h3, .topic_content h4, .topic_content h5, .topic_content h6 {
   margin: 30px 0 15px;
@@ -407,7 +416,7 @@ pre code {
   white-space: pre-wrap;
 }
 /* .topic_content div ul {list-style-position: inside;} */
-.topic_content div ul li ul {padding-left: 25px;}
+.topic_content ul, .topic_content ol {padding-left: 25px;}
 .topic_content table {
   padding: 0;
   border-collapse: collapse;

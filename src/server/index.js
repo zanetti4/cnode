@@ -23,7 +23,8 @@ export function getTopics(params = {}) {
 
 export function getDetail(id = '', params = {}) {
     let defaults = {
-        accesstoken: ''
+        accesstoken: '',
+        mdrender: true
     };
 
     Object.assign(defaults, params);

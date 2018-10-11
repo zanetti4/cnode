@@ -168,6 +168,8 @@ export default {
       let isLogin = Cookies.get('success');
       let name = this.$route.name;
       let index = -1;
+
+      // console.log(1111111111);
       
       if(isLogin){
         //登录了
@@ -182,8 +184,6 @@ export default {
             return obj.name === name;
           }
         });
-
-        // console.log(`登录了：${name}，${index}`);
 
         this.$nextTick(() => {
           let headNav = document.querySelector('.headnav');
@@ -276,11 +276,18 @@ export default {
             });
           }
         }, 120);
+      }else{
+        //没登录
+        this.$nextTick(() => {
+          let headNav = document.querySelector('.headnav');
+
+          headNav.className = 'ivu-col ivu-col-span-8 ivu-col-offset-6 headnav';
+        });
       }
     },
     //退出
     signOut(e){
-      /* console.log(e.target);
+      /* 
       console.log(e.target.className); */
       let classIndex = e.target.className.indexOf('head-menu-out');
 
@@ -289,6 +296,9 @@ export default {
         this.myInfoKeys.forEach(myField => {
           Cookies.remove(myField);
         });
+
+        this.whichTopNav();
+        this.messageCount();
       }
     }
   }
