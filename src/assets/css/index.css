@@ -40,6 +40,10 @@ img {
     text-align: right;
 }
 
+.mt-15 {
+    margin-top: 15px;
+}
+
 .inline-pic {
     display: inline-block;
     max-width: 100%;

@@ -1,24 +1,21 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+import Cookies from 'js-cookie';
 import { getTopics, getDetail, getMesCount, markAll } from '@/server';
 
 Vue.use(Vuex);
 
 let store = new Vuex.Store({
-    strict: true,
+    // strict: true,
     state: {
         spinShow: true,
         noReplyList: [],
         isLogin: false,
         detail: {},
         notReadCount: 0,
-        myInfo: []
+        myInfo: null
     },
     getters: {
-        //登录状态
-        /* isLoginVuex(state) {
-            return state.isLogin;
-        } */
         //反转义文章内容的字符实体名称
         decodeContent(state) {
             let REGX_HTML_DECODE = /&\w+;/g;
@@ -47,6 +44,24 @@ let store = new Vuex.Store({
             } else {
                 return '';
             }
+        },
+        //从 cookie 中读取我的字段
+        getMyField(state) {
+            if (!state.myInfo) {
+                //刷新页面后
+                state.myInfo = JSON.parse(Cookies.get('myField'));
+            }
+
+            return state.myInfo;
+        },
+        //从 cookie 中读取登录状态
+        getIsLogin(state) {
+            if (!state.isLogin) {
+                //刷新页面后
+                state.isLogin = !!Cookies.get('success');
+            }
+
+            return state.isLogin;
         }
     },
     actions: {
@@ -87,11 +102,10 @@ let store = new Vuex.Store({
         noReplyListMu(state, payload) {
             state.noReplyList = payload.noReplys;
         },
-        /* ,
         //存入登录状态
         isLoginMu(state, payload) {
             state.isLogin = payload.success;
-        } */
+        },
         //文章细览
         detailMu(state, payload) {
             state.detail = payload.detail;

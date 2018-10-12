@@ -1,9 +1,10 @@
 <template>
   <Row type="flex" justify="center" :gutter="16" class-name="pt-15">
     <Col span="16" class-name="leftcol" :style="{padding: 0}">
-      <cnode-article @get-user="getUserDe" @get-replies="getRepliesDe"></cnode-article>
+      <cnode-article @get-user="getUserDe" @get-replies="getRepliesDe" :newComment="hasNewComment"></cnode-article>
       <comments :allReplies="replies" @up-to-detail="upDetail"></comments>
-      <reply v-if="false"></reply>
+      <!-- <reply v-if="false"></reply> -->
+      <reply-mavon v-if="isLogin" @new-comment="newCommentDe"></reply-mavon>
     </Col>
     <Col span="5">
       <author :authorName="loginname" v-if="loginname.length" @user-to-detail="otherTopics"></author>
@@ -17,11 +18,13 @@
 <script>
 import CnodeArticle from './cnode-article';
 import Comments from './comments';
-import Reply from './reply';
+// import Reply from './reply';
+import ReplyMavon from './reply-mavon';
 import Ads from '@/components/side/ads';
 import NoReply from '@/components/side/no-reply';
 import Author from '@/components/side/author';
 import Others from '@/components/side/others';
+// import Cookies from 'js-cookie';
 
 export default {
   name: 'Detail',
@@ -32,14 +35,16 @@ export default {
     Author,
     Others,
     Comments,
-    Reply
+    // Reply,
+    ReplyMavon
   },
   data(){
     return {
       loginname: '',
       recentTopics: [],
       userData: {},
-      replies: []
+      replies: [],
+      hasNewComment: 0
     };
   },
   watch: {
@@ -47,15 +52,28 @@ export default {
       this.otherTopics(this.userData);
     }
   },
+  computed: {
+    //判断是否登录
+    isLogin(){
+      /* let isLogin = Cookies.get('success');
+
+      return isLogin; */
+      // return this.$store.state.isLogin;
+      return this.$store.getters.getIsLogin;
+    }
+  },
   methods: {
     //获取作者注册名
     getUserDe(loginname){
       this.loginname = loginname;
-      //console.log(this.loginname);
     },
     //获取回复
     getRepliesDe(replies){
       this.replies = replies;
+    },
+    //获得新评论通知
+    newCommentDe(newNum){
+      this.hasNewComment = newNum;
     },
     //获取作者其它话题
     otherTopics(user){

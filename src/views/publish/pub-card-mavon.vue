@@ -43,7 +43,7 @@ export default {
           ul: true, // 无序列表
           ol: true, // 有序列表
           link: true, // 链接
-          imagelink: true, // 图片链接
+          // imagelink: true, // 图片链接
           help: true, // 帮助
           preview: true, // 预览
           fullscreen: true // 全屏编辑
@@ -68,9 +68,16 @@ export default {
     }else if(this.$route.name === 'Edit'){
       //编辑话题
       this.submitKind = 'edit';
-      this.formData.title = this.$route.params.detailInfo.title;
-      this.formData.tab = this.$route.params.detailInfo.tab;
-      this.formData.value = this.$route.params.detailInfo.content;
+
+      if(this.$route.params.detailInfo){
+        //话题细览信息存在
+        this.formData.title = this.$route.params.detailInfo.title;
+        this.formData.tab = this.$route.params.detailInfo.tab;
+        this.formData.value = this.$route.params.detailInfo.content;
+      }else{
+        //话题细览信息不存在：刷新页面
+        this.$router.back();
+      }
     }
   },
   methods: {

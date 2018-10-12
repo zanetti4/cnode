@@ -40,6 +40,7 @@ import VueMarkdown from 'vue-markdown';
 
 export default {
   name: 'CnodeArticle',
+  components: {BigImg, VueMarkdown},
   data(){
     return {
       info: {},
@@ -54,7 +55,12 @@ export default {
       }
     };
   },
-  components: {BigImg, VueMarkdown},
+  props: {
+    newComment: {
+      type: Number,
+      default: 0
+    }
+  },
   created(){
     this.getDetailEmitName();
   },
@@ -81,7 +87,8 @@ export default {
   watch: {
     $route(){
       this.getDetailEmitName();
-    }
+    },
+    newComment: 'getDetailEmitName'
   },
   computed: {
     //创建时间
@@ -215,6 +222,7 @@ export default {
         // 获取当前图片地址
         this.imgSrc = e.target.src;
         this.topImg = e.target.offsetTop;
+        // console.dir(e.target);
       }
     },
     //退出大图
@@ -337,7 +345,7 @@ export default {
   border-top: solid 1px #E5E5E5;
 }
 
-.markdown-text p,.preview p, .topic_content p {
+.markdown-text p, .preview p/*, .topic_content p*/ {
 	white-space: pre-wrap;
 	white-space: -moz-pre-wrap;
 	white-space: -pre-wrap;
@@ -347,6 +355,10 @@ export default {
 	margin: 1em 0;
   font-size: 18px;
 }
+.topic_content p {
+	word-wrap: break-word;
+	margin: 1em 0;
+}
 
 .markdown-text>:last-child,.preview>:last-child,textarea#title, .topic_content>:last-child {
 	margin-bottom: 1em;
@@ -355,7 +367,10 @@ export default {
 .markdown-text>:first-child,.preview>:first-child, .topic_content>:first-child {
 	margin-top: 0;
 }
-
+.topic_content pre {
+  padding: 7px 15px;
+  background-color: #F7F7F7;
+}
 .markdown-text li,.preview li, .topic_content li {
 	font-size: 14px;
 	line-height: 2em;
@@ -438,6 +453,10 @@ pre code {
 .topic_content table tr td>:last-child {margin-bottom: 0;}
 .topic_content table tr td>:first-child {margin-top: 0;}
 .topic_content p img {cursor: pointer;}
+.topic_content table img {
+  cursor: pointer;
+  position: relative;
+}
 .cancel-col {
   background-color: #E5E5E5;
   border-color: #E5E5E5;

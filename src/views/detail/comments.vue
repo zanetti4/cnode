@@ -21,7 +21,8 @@
                 <Icon type="ios-thumbs-up-outline" size="18" @click="up(item.id, item.author.loginname)" :class="{'ivu-icon-ios-thumbs-up': item.is_uped}" /> {{item.ups.length}}
               </Col>
             </Row>
-            <p v-html="item.content" class="comments-row-con"></p>
+            <!-- <p v-html="item.content" class="comments-row-con"></p> -->
+            <vue-markdown class="comments-row-con" :source="item.content"></vue-markdown>
           </Col>
         </Row>
       </CellGroup>
@@ -33,6 +34,7 @@
 import time from '@/assets/js/time';
 import Cookies from 'js-cookie';
 import axios from 'axios';
+import VueMarkdown from 'vue-markdown';
 
 export default {
   name: 'Comments',
@@ -44,6 +46,7 @@ export default {
       }
     }
   },
+  components: {VueMarkdown},
   computed: {
     //回复数
     numReplies(){

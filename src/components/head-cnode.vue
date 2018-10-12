@@ -131,7 +131,8 @@ export default {
     },
     //从 vuex 获取我的信息字段
     myInfoKeys(){
-      return this.$store.state.myInfo;
+      // return this.$store.state.myInfo;
+      return this.$store.getters.getMyField;
     }
   },
   methods: {
@@ -287,8 +288,6 @@ export default {
     },
     //退出
     signOut(e){
-      /* 
-      console.log(e.target.className); */
       let classIndex = e.target.className.indexOf('head-menu-out');
 
       if(e.target.nodeName === 'A' && classIndex !== -1){
@@ -297,8 +296,10 @@ export default {
           Cookies.remove(myField);
         });
 
+        Cookies.remove('myField');
         this.whichTopNav();
         this.messageCount();
+        this.$store.commit('isLoginMu', {success: false});
       }
     }
   }

@@ -159,7 +159,9 @@ export default {
               Cookies.set(key, data[key]);
             });
 
+            Cookies.set('myField', JSON.stringify(aKeys));
             this.$store.commit('myInfoMu', {info: aKeys});
+            this.$store.commit('isLoginMu', {success: true});
 
             /* this.$router.addRoutes([
               {
