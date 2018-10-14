@@ -2,7 +2,7 @@
   <section class="comments mt-15">
     <Card title="添加回复" :bordered="false" :dis-hover="true">
       <form class="reply-form" @submit.prevent="reply">
-        <mavon-editor v-model="formData.value" :subfield="formData.subfield" :toolbars="formData.toolbars" class="reply-form-mavon"></mavon-editor>
+        <mavon-editor v-model.trim="formData.value" :subfield="formData.subfield" :toolbars="formData.toolbars" class="reply-form-mavon"></mavon-editor>
         <Button type="primary" html-type="submit">回复</Button>
       </form>
     </Card>
@@ -73,7 +73,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 .reply-form {padding: 10px;}
 .reply-form-mavon {margin-bottom: 24px;}
 </style>

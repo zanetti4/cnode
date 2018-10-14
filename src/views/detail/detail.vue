@@ -1,8 +1,8 @@
 <template>
   <Row type="flex" justify="center" :gutter="16" class-name="pt-15">
     <Col span="16" class-name="leftcol" :style="{padding: 0}">
-      <cnode-article @get-user="getUserDe" @get-replies="getRepliesDe" :newComment="hasNewComment"></cnode-article>
-      <comments :allReplies="replies" @up-to-detail="upDetail"></comments>
+      <cnode-article @get-user="getUserDe" @get-replies="getRepliesDe" :newComment="hasNewComment" :newReplyCom="hasNewReplyCom"></cnode-article>
+      <comments :allReplies="replies" @up-to-detail="upDetail" @add-render="addRenderDe" @new-reply-comment="newReplyComDe"></comments>
       <!-- <reply v-if="false"></reply> -->
       <reply-mavon v-if="isLogin" @new-comment="newCommentDe"></reply-mavon>
     </Col>
@@ -25,6 +25,7 @@ import NoReply from '@/components/side/no-reply';
 import Author from '@/components/side/author';
 import Others from '@/components/side/others';
 // import Cookies from 'js-cookie';
+import Vue from 'vue';
 
 export default {
   name: 'Detail',
@@ -44,7 +45,8 @@ export default {
       recentTopics: [],
       userData: {},
       replies: [],
-      hasNewComment: 0
+      hasNewComment: 0,
+      hasNewReplyCom: 0
     };
   },
   watch: {
@@ -71,9 +73,13 @@ export default {
     getRepliesDe(replies){
       this.replies = replies;
     },
-    //获得新评论通知
+    //获得新话题评论通知
     newCommentDe(newNum){
       this.hasNewComment = newNum;
+    },
+    //获得新评论回复通知
+    newReplyComDe(newComNum){
+      this.hasNewReplyCom = newComNum;
     },
     //获取作者其它话题
     otherTopics(user){
@@ -121,6 +127,21 @@ export default {
           reply.is_uped = false;
         }
       }
+    },
+    //添加渲染评论表单
+    addRenderDe(commentId){
+      let targetComment = this.replies.find(reply => reply.id === commentId);
+
+      if(targetComment && targetComment.renderReply === undefined){
+        //找到那条评论且没有 renderReply 属性
+        // targetComment.renderReply = true;
+        Vue.set(targetComment, 'renderReply', true);
+      }else if(targetComment){
+        //找到那条评论，已经设置过 renderReply 属性
+        targetComment.renderReply = !targetComment.renderReply;
+      }
+
+      // console.log(this.replies);
     }
   }
 }

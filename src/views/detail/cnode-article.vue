@@ -59,6 +59,10 @@ export default {
     newComment: {
       type: Number,
       default: 0
+    },
+    newReplyCom: {
+      type: Number,
+      default: 0
     }
   },
   created(){
@@ -88,7 +92,8 @@ export default {
     $route(){
       this.getDetailEmitName();
     },
-    newComment: 'getDetailEmitName'
+    newComment: 'getDetailEmitName',
+    newReplyCom: 'getDetailEmitName'
   },
   computed: {
     //创建时间

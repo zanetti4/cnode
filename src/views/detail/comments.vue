@@ -19,10 +19,17 @@
               </Col>
               <Col span="2" class-name="comments-row-up">
                 <Icon type="ios-thumbs-up-outline" size="18" @click="up(item.id, item.author.loginname)" :class="{'ivu-icon-ios-thumbs-up': item.is_uped}" /> {{item.ups.length}}
+                <Icon type="ios-undo-outline" size="20" title="回复" @click="replyComment(item.id, item.renderReply, item.author.loginname)" />
               </Col>
             </Row>
             <!-- <p v-html="item.content" class="comments-row-con"></p> -->
             <vue-markdown class="comments-row-con" :source="item.content"></vue-markdown>
+            <transition name="comreply">
+              <form class="comments-row-reply" v-if="item.renderReply" @submit.prevent="reply(item.id, item.author.loginname, $event)">
+                <mavon-editor v-model="formData['value' + item.id]" :subfield="formData.subfield" :toolbars="formData.toolbars" class="reply-form-mavon"></mavon-editor>
+                <Button type="primary" html-type="submit">回复</Button>
+              </form>
+            </transition>
           </Col>
         </Row>
       </CellGroup>
@@ -34,10 +41,12 @@
 import time from '@/assets/js/time';
 import Cookies from 'js-cookie';
 import axios from 'axios';
+import Vue from 'vue';
 import VueMarkdown from 'vue-markdown';
 
 export default {
   name: 'Comments',
+  components: {VueMarkdown},
   props: {
     allReplies: {
       type: Array,
@@ -46,7 +55,35 @@ export default {
       }
     }
   },
-  components: {VueMarkdown},
+  data(){
+    return {
+      formData: {
+        // value: '',
+        toolbars: {
+          bold: true, // 粗体
+          italic: true, // 斜体
+          quote: true, // 引用
+          ul: true, // 无序列表
+          ol: true, // 有序列表
+          link: true, // 链接
+          // imagelink: true, // 图片链接
+          help: true, // 帮助
+          preview: true, // 预览
+          fullscreen: true // 全屏编辑
+        },
+        subfield: false
+      },
+      newReplyCom: 0
+    };
+  },
+  /* watch: {
+    allReplies: {
+      deep: true,
+      handler(){
+        this.renderReply();
+      }
+    }
+  }, */
   computed: {
     //回复数
     numReplies(){
@@ -145,6 +182,57 @@ export default {
       let myLoginname = Cookies.get('loginname');
 
       return myLoginname === loginname ? true : false;
+    },
+    //点击回复图标
+    replyComment(commentId, isRenderReply, loginname){
+      let accesstoken = Cookies.get('accesstoken');
+      
+      if(accesstoken){
+        //登录了
+        if(isRenderReply === undefined){
+          //首次点击回复图标
+          Vue.set(this.formData, 'value' + commentId, '@' + loginname + ' ');
+        }
+
+        this.$emit('add-render', commentId);
+      }else{
+        //没登录
+        alert('请先登录，登录后即可回复。');
+      }
+    },
+    //点击回复按钮
+    async reply(commentId, loginname, e){
+      let content = this.formData['value' + commentId].trim();
+
+      if(content && content !== '@' + loginname){
+        //有内容
+        let accesstoken = Cookies.get('accesstoken');
+        let topicId = this.$route.params.id;
+
+        let {data} = await this.$api.reply(topicId, {
+          accesstoken,
+          content,
+          reply_id: commentId
+        });
+        
+        if(data.success){
+          //评论发布成功
+          this.newReplyCom++;
+          this.$emit('new-reply-comment', this.newReplyCom);
+        }else{
+          //评论发布失败
+          alert('评论发布失败');
+        }
+      }else{
+        //没内容
+        // console.log(e);
+
+        this.$nextTick(() => {
+          let textarea = e.target.querySelector('.auto-textarea-input');
+
+          textarea.focus();
+        });
+      }
     }
   }
 }
@@ -180,10 +268,24 @@ export default {
   cursor: pointer;
   color: black;
 }
-.comments-row-up i:hover {color: #08C;}
-.comments-row-con div.markdown-text p {
+.comments-row-up i:hover, .comments-row-con a:link, .comments-row-con a:visited {color: #08C;}
+.comments-row-con a:hover {text-decoration: underline;}
+.comments-row-con div.markdown-text p, .comments-row-con {
   font-size: 14px;
   line-height: 1.8;
   padding-top: 5px;
+}
+.comments-row-reply {
+  margin-top: 10px;
+  padding-bottom: 10px;
+  overflow: hidden;
+}
+.comreply-enter-active, .comreply-leave-active {
+  transition: height .5s linear, margin-top .5s linear, padding-bottom .5s linear;
+}
+.comreply-enter, .comreply-leave-to /* .comreply-leave-active below version 2.1.8 */ {
+  height: 0;
+  margin-top: 0;
+  padding-bottom: 0;
 }
 </style>
