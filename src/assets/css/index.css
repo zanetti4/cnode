@@ -44,6 +44,10 @@ img {
     margin-top: 15px;
 }
 
+.mb-5 {
+    margin-bottom: 5px;
+}
+
 .inline-pic {
     display: inline-block;
     max-width: 100%;

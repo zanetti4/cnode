@@ -1,14 +1,14 @@
 <template>
   <section class="comments">
     <Card :title="numReplies" :bordered="false" :dis-hover="true">
-      <CellGroup>
+      <CellGroup class="comments-group">
         <Row type="flex" justify="space-around" class="code-row-bg comments-row" v-for="(item, index) in allReplies" :key="item.id" :class="{'comments-rowhl': item.ups.length > 2}" :id="item.id">
           <Col span="1">
             <router-link :to="{name: 'User', params: {loginname: item.author.loginname}}">
               <Avatar shape="square" :src="item.author.avatar_url" />
             </router-link>
           </Col>
-          <Col span="22">
+          <Col span="22" class-name="comments-row-right">
             <Row>
               <Col span="22" class-name="comments-row-nft">
                 <router-link :to="{name: 'User', params: {loginname: item.author.loginname}}">
@@ -23,7 +23,10 @@
               </Col>
             </Row>
             <!-- <p v-html="item.content" class="comments-row-con"></p> -->
-            <vue-markdown class="comments-row-con" :source="item.content"></vue-markdown>
+            <!-- <div @mouseenter="session">
+              <vue-markdown class="comments-row-con" :source="item.content"></vue-markdown>
+            </div> -->
+            <vue-markdown class="comments-row-con" :source="item.content" @mouseover.native="session($event, item.author.loginname, item.reply_id)" @mouseout.native="hideSession($event, item.author.loginname)"></vue-markdown>
             <transition name="comreply">
               <form class="comments-row-reply" v-if="item.renderReply" @submit.prevent="reply(item.id, item.author.loginname, $event)">
                 <mavon-editor v-model="formData['value' + item.id]" :subfield="formData.subfield" :toolbars="formData.toolbars" class="reply-form-mavon"></mavon-editor>
@@ -32,6 +35,9 @@
             </transition>
           </Col>
         </Row>
+        <transition name="comsession">
+          <session-poptip v-if="showSession" :style="{'top': sessionTop + 'px', 'left': sessionLeft + 'px'}" :origin="originalReply" @mouseenter.native="showPoptip" @mouseleave.native="hidePoptip"></session-poptip>
+        </transition>
       </CellGroup>
     </Card>
   </section>
@@ -39,6 +45,7 @@
 
 <script>
 import time from '@/assets/js/time';
+import sessionPoptip from './session-poptip';
 import Cookies from 'js-cookie';
 import axios from 'axios';
 import Vue from 'vue';
@@ -46,7 +53,7 @@ import VueMarkdown from 'vue-markdown';
 
 export default {
   name: 'Comments',
-  components: {VueMarkdown},
+  components: {VueMarkdown, sessionPoptip},
   props: {
     allReplies: {
       type: Array,
@@ -73,7 +80,12 @@ export default {
         },
         subfield: false
       },
-      newReplyCom: 0
+      newReplyCom: 0,
+      showSession: false,
+      sessionTop: 0,
+      sessionLeft: 0,
+      originalReply: {},
+      timerPoptip: null
     };
   },
   /* watch: {
@@ -225,14 +237,58 @@ export default {
         }
       }else{
         //没内容
-        // console.log(e);
-
         this.$nextTick(() => {
           let textarea = e.target.querySelector('.auto-textarea-input');
 
           textarea.focus();
         });
       }
+    },
+    //出现会话层
+    session(e, loginname, replyId){
+      let target = e.target;
+      let indexAt = target.innerText.indexOf('@');
+      let myLoginname = Cookies.get('loginname');
+
+      if(target.nodeName === 'A' && indexAt === 0 && myLoginname === loginname){
+        //鼠标悬停的是以@开头的链接，并且这条评论是我发的
+        clearTimeout(this.timerPoptip);
+        this.sessionTop = target.offsetTop - 20;
+        this.sessionLeft = target.offsetLeft + target.offsetWidth + 7;
+        this.showSession = true;
+
+        let reply = this.allReplies.find(reply => reply.id === replyId);
+
+        if(reply){
+          //找到原评论
+          this.originalReply = reply;
+        }
+      }
+    },
+    //隐藏会话层
+    hideSession(e, loginname){
+      let target = e.target;
+      let indexAt = target.innerText.indexOf('@');
+      let myLoginname = Cookies.get('loginname');
+
+      if(target.nodeName === 'A' && indexAt === 0 && myLoginname === loginname){
+        //鼠标悬停的是以@开头的链接，并且这条评论是我发的
+        this.timerPoptip = setTimeout(() => {
+          this.showSession = false;
+        }, 500);
+      }
+    },
+    //鼠标悬停在会话层
+    showPoptip(){
+      // console.log(1111);
+      clearTimeout(this.timerPoptip);
+      this.showSession = true;
+    },
+    //鼠标移出会话层
+    hidePoptip(){
+      this.timerPoptip = setTimeout(() => {
+        this.showSession = false;
+      }, 500);
     }
   }
 }
@@ -270,10 +326,18 @@ export default {
 }
 .comments-row-up i:hover, .comments-row-con a:link, .comments-row-con a:visited {color: #08C;}
 .comments-row-con a:hover {text-decoration: underline;}
-.comments-row-con div.markdown-text p, .comments-row-con {
+.comments-row-con div.markdown-text p {
   font-size: 14px;
   line-height: 1.8;
   padding-top: 5px;
+}
+.comments-row-con {
+  font-size: 14px;
+  line-height: 1.8;
+  padding-top: 5px;
+}
+.comments-group {
+  position: relative;
 }
 .comments-row-reply {
   margin-top: 10px;
@@ -288,4 +352,11 @@ export default {
   margin-top: 0;
   padding-bottom: 0;
 }
+.comsession-enter-active, .comsession-leave-active {
+  transition: opacity .5s linear;
+}
+.comsession-enter, .comsession-leave-to {
+  opacity: 0;
+}
+.comments-row-right {position: static;}
 </style>

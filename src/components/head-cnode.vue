@@ -7,7 +7,8 @@
             <img src="@/assets/images/cnode_logo.png" alt="cnode_logo" class="inline-pic" />
           </router-link>
         </Col>
-        <Col span="8" offset="6" class-name="headnav">
+        <!-- <Col span="8" offset="6" class-name="headnav"> -->
+        <Col span="3" offset="11" class-name="headnav">
           <!-- <div class="ks-clear" v-if="whichNav">
             <MenuItem :name="index" v-for="(item, index) in topNav" :key="item.path" :to="{name: item.name}">{{item.title}}</MenuItem>
           </div>
@@ -189,7 +190,8 @@ export default {
         this.$nextTick(() => {
           let headNav = document.querySelector('.headnav');
 
-          headNav.className = 'ivu-col ivu-col-span-9 ivu-col-offset-5 headnav';
+          // headNav.className = 'ivu-col ivu-col-span-9 ivu-col-offset-5 headnav';
+          headNav.className = 'ivu-col ivu-col-span-4 ivu-col-offset-10 headnav';
         });
       }else{
         //没登录
@@ -262,7 +264,8 @@ export default {
 
               let headNav = document.querySelector('.headnav');
 
-              headNav.className = 'ivu-col ivu-col-span-10 ivu-col-offset-5 headnav';
+              // headNav.className = 'ivu-col ivu-col-span-10 ivu-col-offset-5 headnav';
+              headNav.className = 'ivu-col ivu-col-span-5 ivu-col-offset-9 headnav';
             });
           }else{
             //没有未读消息
@@ -273,7 +276,8 @@ export default {
 
               let headNav = document.querySelector('.headnav');
 
-              headNav.className = 'ivu-col ivu-col-span-9 ivu-col-offset-5 headnav';
+              // headNav.className = 'ivu-col ivu-col-span-9 ivu-col-offset-5 headnav';
+              headNav.className = 'ivu-col ivu-col-span-4 ivu-col-offset-10 headnav';
             });
           }
         }, 120);
@@ -282,7 +286,8 @@ export default {
         this.$nextTick(() => {
           let headNav = document.querySelector('.headnav');
 
-          headNav.className = 'ivu-col ivu-col-span-8 ivu-col-offset-6 headnav';
+          // headNav.className = 'ivu-col ivu-col-span-8 ivu-col-offset-6 headnav';
+          headNav.className = 'ivu-col ivu-col-span-3 ivu-col-offset-11 headnav';
         });
       }
     },
