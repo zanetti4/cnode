@@ -1,0 +1,108 @@
+卷 DATA 的文件夹 PATH 列表
+卷序列号为 1C71-D987
+D:.
+│  App.vue
+│  main.js
+│  tree.txt
+│  
+├─assets
+│  ├─css
+│  │      index.css
+│  │      
+│  ├─images
+│  │      cnode_alinode-btm.jpg
+│  │      cnode_alinode.jpg
+│  │      cnode_alipay.jpg
+│  │      cnode_client.png
+│  │      cnode_golang.png
+│  │      cnode_logo.png
+│  │      cnode_phphub.png
+│  │      cnode_qbox.jpg
+│  │      cnode_qiniu.jpg
+│  │      cnode_ruby.png
+│  │      cnode_testerhome.png
+│  │      cnode_ucloud-btm.jpg
+│  │      cnode_ucloud.jpg
+│  │      
+│  └─js
+│          my-methods.js
+│          time.js
+│          
+├─components
+│  │  foot-cnode.vue
+│  │  head-cnode.vue
+│  │  
+│  ├─side
+│  │      ads.vue
+│  │      author-vx.vue
+│  │      author.vue
+│  │      client.vue
+│  │      friend.vue
+│  │      no-reply.vue
+│  │      others.vue
+│  │      publish-btn.vue
+│  │      
+│  └─ueditor
+│          ueditor.vue
+│          
+├─router
+│      index.js
+│      navConfig.js
+│      topNav.js
+│      topNavLogin.js
+│      user-children.js
+│      
+├─server
+│      index.js
+│      
+├─store
+│      index.js
+│      
+└─views
+    ├─detail
+    │      big-img.vue
+    │      cnode-article-vx.vue
+    │      cnode-article.vue
+    │      comments.vue
+    │      detail-vx.vue
+    │      detail.vue
+    │      reply-mavon.vue
+    │      reply.vue
+    │      session-poptip.vue
+    │      
+    ├─login
+    │      about.vue
+    │      login.vue
+    │      
+    ├─main
+    │      article-item.vue
+    │      list.vue
+    │      main.vue
+    │      sub-nav.vue
+    │      
+    ├─mymes
+    │      former-mes.vue
+    │      mymes.vue
+    │      new-mes.vue
+    │      
+    ├─publish
+    │      guide.vue
+    │      markdown.vue
+    │      pub-card-mavon.vue
+    │      pub-card.vue
+    │      publish.vue
+    │      
+    ├─setting
+    │      setting.vue
+    │      
+    └─user
+        │  recent-replies.vue
+        │  recent-topics.vue
+        │  user-info.vue
+        │  user.vue
+        │  
+        └─user-topics
+                collections.vue
+                replies.vue
+                topics.vue
+                

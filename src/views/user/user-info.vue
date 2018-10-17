@@ -53,7 +53,7 @@ export default {
     signUp(){
       if(this.user.create_at){
         //注册时间已拿到
-        let obj = time.getTime(this.user.create_at, new Date().toISOString());
+        /* let obj = time.getTime(this.user.create_at, new Date().toISOString());
 
         switch(true){
           case obj.year !== 0:
@@ -73,7 +73,9 @@ export default {
             break;
           default:
             return '刚刚';
-        };
+        }; */
+
+        return this.$myMethods.getRelativeTime(this.user.create_at);
       }
     }
   },

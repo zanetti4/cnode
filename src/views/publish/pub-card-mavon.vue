@@ -2,7 +2,7 @@
   <section class="userinfo">
     <Breadcrumb>
       <BreadcrumbItem to="/">主页</BreadcrumbItem>
-      <BreadcrumbItem>发布话题</BreadcrumbItem>
+      <BreadcrumbItem>{{cardTitle}}话题</BreadcrumbItem>
     </Breadcrumb>
     <Form :label-width="70" class="pubform" :rules="ruleValidate" :model="formData" ref="formValidate" @submit.native.prevent="publish('formValidate')">
       <FormItem label="选择版块" prop="tab">
@@ -57,17 +57,20 @@ export default {
           { type: 'string', min: 10, message: '标题十个字及以上', trigger: 'blur' }
         ]
       },
-      submitKind: ''
+      submitKind: '',
+      cardTitle: ''
     };
   },
   created(){
     if(this.$route.name === 'Publish'){
       //发布话题
       this.submitKind = 'publish';
+      this.cardTitle = '发布';
       this.formData.title = '';
     }else if(this.$route.name === 'Edit'){
       //编辑话题
       this.submitKind = 'edit';
+      this.cardTitle = '编辑';
 
       if(this.$route.params.detailInfo){
         //话题细览信息存在
