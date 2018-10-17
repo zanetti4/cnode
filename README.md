@@ -130,6 +130,104 @@ vue-markdown: 针对 vue 的强大、高效的 markdown 解析器。
                 topics.vue // 创建的话题
 ```
 
+## 心得体会&技术难点
+> 这是我的第一个完整的以 vue 为框架制作的项目，过程中遇到了很多问题，可以说是横垄地拉车，一步一个坎儿。不过经过我的不懈努力，网上查找资料、发帖，在技术群里提问，大部分难题解决了，非常感谢那些指点我的高手！整个项目一共花费了一个多月，实际上现在再看所需功能，似乎没有那么多，也不该用这么长时间。我想：随着对于 vue 经验的积累，以后能越做越熟练。
+1. 在做登录后返回刚才浏览的页面时，一开始写的比较繁琐：
+```javascript
+this.$router.push({name: this.fromRoute, params: this.params, query: this.query});
+```
+**解决办法：**
+```javascript
+this.$router.back();
+```
+2. 想要在组件中修改 iview 中分页组件的样式，无法覆盖。  
+**解决办法：**  
+style 标签不能加 scoped 属性。
+3. 无人回复的话题不够5条。  
+**解决办法：**  
+由于我先获取所有主题首页列表，从头截取一部分，再筛选出回复数为零的。只需要截取的条数多一些就可以了。
+4. 第一次使用伪元素 :before。  
+**解决办法：**  
+在顶部导航中先根据 name 判断是未读消息链接，给它加上 badge 类名，再通过类名找到这个 a 元素，用 setAttribute 添加 mesCount 属性。在样式中通过属性选择器设置伪元素的样式。
+5. 点击话题详情页表格中的图片时，大图的显示位置不对。  
+**解决办法：**  
+我先获取文中图片的 offsetTop，根据此值设置大图的位置。但是对于表格中 position: static 的元素，它的 offsetParent 是 td/th，所以不是想要的 offsetTop。把表格中的图片都设置为 position: relative，问题迎刃而解。
+6. 为评论点赞时，报错：401 Unauthorized。  
+**解决办法：**  
+post 请求配置写错了，应该是 data 而不是 params。
+7. 给评论回复时，显示、隐藏编辑器第一次用到内置组件 transition。  
+**解决办法：**  
+给 transition 组件设置 name="comsession"
+```css
+.comsession-enter-active, .comsession-leave-active {
+  transition: opacity .5s linear;
+}
+.comsession-enter, .comsession-leave-to {
+  opacity: 0;
+}
+```
+8. 给评论进行回复，因为每条评论都能展开一个编辑器，那么编辑器该怎么绑定数据？  
+**解决办法：**  
+绑定这条评论所对应的数据时，写成动态的方式：
+```bash
+v-model="formData['value' + item.id]"
+```
+9. 给评论进行回复，显示编辑器时找不到新添加的评论对象属性。  
+**解决办法：**  
+对于向响应式对象上添加新属性，必须使用 Vue.set()，因为 Vue 无法探测普通的新增属性。
+10. 渲染评论内容时，出现源码。  
+**解决办法：**  
+使用 vue-markdown 组件进行渲染，因为要与提交时的数据格式一致。
+11. 因为 Detail, Edit 都属于一级路由，又使用了 router-view，从话题细览页跳转到编辑页，该怎么传递话题数据呢？  
+**解决办法：**  
+通过 params 进行传递：
+```javascript
+this.$router.push({
+  name: 'Edit',
+  params: {
+    detailInfo: this.info,
+    topicId: this.info.id
+  }
+});
+```
+在编辑页获取 params:
+```javascript
+this.$route.params.detailInfo
+```
+12. 相对时间的计算  
+**解决办法：**  
+网上找到一个 js 文件，可以获取两个时间之间的时间段。我写了一个插件，最后返回相对时间。
+13. 刷新页面后 vuex 中的状态会消失。  
+**解决办法：**  
+先将数据存在 cookie 中，在 vuex 中通过 getters 从 cookie 获取：
+```javascript
+//从 cookie 中读取我的字段
+getMyField(state) {
+    if (!state.myInfo) {
+        //刷新页面后
+        state.myInfo = JSON.parse(Cookies.get('myField'));
+    }
+
+    return state.myInfo;
+}
+```
+组件中再从 getters 里获取数据：
+```javascript
+//从 vuex 获取我的信息字段
+myInfoKeys(){
+  return this.$store.getters.getMyField;
+}
+```
+14. 如何实现退出后的页面跳转？  
+**解决办法：**  
+在 Signout 路由独享的守卫里，判断点退出时浏览的页面是否需要登录，再进行 next() 跳转。
+15. 子组件获得父组件传递的数据，进行渲染，报错：数据 undefined。  
+**解决办法：**  
+在子组件使用时加 v-if:
+```bash
+<author :authorName="loginname" v-if="loginname.length" @user-to-detail="otherTopics"></author>
+```
+
 ## Build Setup
 
 ``` bash
