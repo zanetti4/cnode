@@ -30,6 +30,106 @@ vue-markdown: 针对 vue 的强大、高效的 markdown 解析器。
 - Mymes: 未读消息页，标记所有未读消息为已读，新消息、过往信息，两个分页。
 - Signout: 退出，如果正在浏览的页面需要登录，则退出到主题首页。如果正在浏览的页面不需要登录，则返回该页面。
 
+## 项目结构
+``` bash
+│  App.vue // 组件总入口
+│  main.js // 项目的总入口
+│  tree.txt // 项目结构
+│  
+├─assets // 静态文件
+│  ├─css // 样式文件
+│  │      index.css // 通用样式
+│  │      
+│  ├─images // 图片
+│  │      cnode_alinode-btm.jpg
+│  │      cnode_alinode.jpg
+│  │      cnode_alipay.jpg
+│  │      cnode_client.png
+│  │      cnode_golang.png
+│  │      cnode_logo.png
+│  │      cnode_phphub.png
+│  │      cnode_qbox.jpg
+│  │      cnode_qiniu.jpg
+│  │      cnode_ruby.png
+│  │      cnode_testerhome.png
+│  │      cnode_ucloud-btm.jpg
+│  │      cnode_ucloud.jpg
+│  │      
+│  └─js // js 文件
+│          my-methods.js // 封装的通用方法
+│          time.js // 获取两个时间之间的时间段
+│          
+├─components // 通用组件
+│  │  foot-cnode.vue // 页脚
+│  │  head-cnode.vue // 页眉
+│  │  
+│  ├─side // 页面右边
+│  │      ads.vue // 广告
+│  │      author.vue // 个人信息
+│  │      client.vue // 客户端二维码
+│  │      friend.vue // 友情社区
+│  │      no-reply.vue // 无人回复的话题
+│  │      others.vue // 作者其它话题
+│  │      publish-btn.vue // 发布话题按钮
+│  │      
+│  └─ueditor // 富文本编辑器（已废弃）
+│          ueditor.vue
+│          
+├─router // 路由信息
+│      index.js
+│      navConfig.js // 主题首页二级导航
+│      topNav.js // 登录前的顶部导航
+│      topNavLogin.js // 登录后的顶部导航
+│      user-children.js // 用户详情页的二级路由
+│      
+├─server // 封装发送请求的函数
+│      index.js
+│      
+├─store // vuex
+│      index.js
+│      
+└─views // 视图
+    ├─detail // 用户详情页
+    │      big-img.vue // 大图
+    │      cnode-article.vue // 话题详情
+    │      comments.vue // 评论
+    │      detail.vue 
+    │      reply-mavon.vue // 给话题写评论
+    │      session-poptip.vue // 评论里的会话提示
+    │      
+    ├─login // 登录页
+    │      about.vue // 关于
+    │      login.vue
+    │      
+    ├─main // 主题首页
+    │      article-item.vue // 一条话题
+    │      list.vue // 话题列表
+    │      main.vue
+    │      sub-nav.vue // 二级导航
+    │      
+    ├─mymes // 未读消息
+    │      former-mes.vue // 过往信息
+    │      mymes.vue
+    │      new-mes.vue // 新消息
+    │      
+    ├─publish // 发布和编辑主题
+    │      guide.vue // 话题发布指南
+    │      markdown.vue // Markdown 语法参考
+    │      pub-card-mavon.vue 
+    │      publish.vue
+    │      
+    └─user // 用户详情页
+        │  recent-replies.vue // 最近参与的5个话题
+        │  recent-topics.vue // 最近创建的5个话题
+        │  user-info.vue // 用户信息
+        │  user.vue
+        │  
+        └─user-topics // 用户的话题
+                collections.vue // 收藏的话题
+                replies.vue // 参与的话题
+                topics.vue // 创建的话题
+```
+
 ## Build Setup
 
 ``` bash
