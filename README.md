@@ -227,8 +227,14 @@ myInfoKeys(){
 ```bash
 <author :authorName="loginname" v-if="loginname.length" @user-to-detail="otherTopics"></author>
 ```
+---
+**遗留问题：**  
+16. detail 视图按住 ctrl 点击首页，不能重定向到首页。  
+17. 在用户页面有该用户最近创建的主题列表，在点击某主题最后回复信息时，跳转到该主题页面，但不能定位到最后一条回复处，并出现报错。  
+18. cnode-article-vx.vue 中通知 vuex 发请求拿到话题数据，保存在 vuex 里。author.vue 中，我想拿到 vuex 存的话题数据中的作者，再发请求获取用户数据。但是我在获取作者时报错了。  
+19. 在 vue 中使用 ueditor 时出现了问题，似乎使用 ueditor 所对应的路由必须是一级的，改成二级路由就会报错。
 
-## Build Setup
+## 安装
 
 ``` bash
 # install dependencies
