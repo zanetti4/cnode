@@ -227,11 +227,22 @@ myInfoKeys(){
 ```bash
 <author :authorName="loginname" v-if="loginname.length" @user-to-detail="otherTopics"></author>
 ```
+16. cnode-article-vx.vue 中通知 vuex 发请求拿到话题数据，保存在 vuex 里。author.vue 中，我想拿到 vuex 存的话题数据中的作者，再发请求获取用户数据。但是我在获取作者时报错了。  
+**解决办法：**  
+子组件计算属性会先执行，当时 state.detail 还没有被赋值，也就是说还不具有 author 或者 loginname 属性，所以要在 authorName 中 return 之前，执行一次 commit 赋值；如：
+```javascript
+computed: {
+  //从 vuex 获取作者名
+  authorName(){
+    this.$store.commit('detailMu',{detial:{author:{loginname:"456"}}});
+    return this.$store.state.detail.author.loginname;
+  }
+}
+```
 ---
 **遗留问题：**  
-16. detail 视图按住 ctrl 点击首页，不能重定向到首页。  
-17. 在用户页面有该用户最近创建的主题列表，在点击某主题最后回复信息时，跳转到该主题页面，但不能定位到最后一条回复处，并出现报错。  
-18. cnode-article-vx.vue 中通知 vuex 发请求拿到话题数据，保存在 vuex 里。author.vue 中，我想拿到 vuex 存的话题数据中的作者，再发请求获取用户数据。但是我在获取作者时报错了。  
+17. detail 视图按住 ctrl 点击首页，不能重定向到首页。  
+18. 在用户页面有该用户最近创建的主题列表，在点击某主题最后回复信息时，跳转到该主题页面，但不能定位到最后一条回复处，并出现报错。  
 19. 在 vue 中使用 ueditor 时出现了问题，似乎使用 ueditor 所对应的路由必须是一级的，改成二级路由就会报错。
 
 ## 安装
