@@ -1,5 +1,6 @@
 <template>
   <section class="comments">
+    <Spin size="large" fix v-if="spinShow"></Spin>
     <Card :title="numReplies" :bordered="false" :dis-hover="true">
       <CellGroup class="comments-group">
         <Row type="flex" justify="space-around" class="code-row-bg comments-row" v-for="(item, index) in allReplies" :key="item.id" :class="{'comments-rowhl': item.ups.length > 2}" :id="item.id">
@@ -30,7 +31,7 @@
             <transition name="comreply">
               <form class="comments-row-reply" v-if="item.renderReply" @submit.prevent="reply(item.id, item.author.loginname, $event)">
                 <mavon-editor v-model="formData['value' + item.id]" :subfield="formData.subfield" :toolbars="formData.toolbars" class="reply-form-mavon"></mavon-editor>
-                <Button type="primary" html-type="submit">回复</Button>
+                <Button type="primary" html-type="submit" :loading="formData['loading' + item.id]">{{btnText(item.id)}}</Button>
               </form>
             </transition>
           </Col>
@@ -85,17 +86,18 @@ export default {
       sessionTop: 0,
       sessionLeft: 0,
       originalReply: {},
-      timerPoptip: null
+      timerPoptip: null,
+      spinShow: true
     };
   },
-  /* watch: {
+  watch: {
     allReplies: {
       deep: true,
       handler(){
-        this.renderReply();
+        this.spinShow = false;
       }
     }
-  }, */
+  },
   computed: {
     //回复数
     numReplies(){
@@ -162,6 +164,8 @@ export default {
         }else{
           //给别人点赞
           this.$api.upDown(id, {accesstoken}).then(res => {
+            this.spinShow = true;
+
             this.$emit('up-to-detail', {
               id,
               action: res.data.action,
@@ -201,6 +205,8 @@ export default {
       
       if(accesstoken){
         //登录了
+        this.spinShow = true;
+
         if(isRenderReply === undefined){
           //首次点击回复图标
           Vue.set(this.formData, 'value' + commentId, '@' + loginname + ' ');
@@ -218,6 +224,8 @@ export default {
 
       if(content && content !== '@' + loginname){
         //有内容
+        Vue.set(this.formData, 'loading' + commentId, true);
+
         let accesstoken = Cookies.get('accesstoken');
         let topicId = this.$route.params.id;
 
@@ -229,12 +237,15 @@ export default {
         
         if(data.success){
           //评论发布成功
+          this.spinShow = true;
           this.newReplyCom++;
           this.$emit('new-reply-comment', this.newReplyCom);
         }else{
           //评论发布失败
           alert('评论发布失败');
         }
+
+        this.formData['loading' + commentId] = false;
       }else{
         //没内容
         this.$nextTick(() => {
@@ -242,6 +253,16 @@ export default {
 
           textarea.focus();
         });
+      }
+    },
+    //按钮显示文字
+    btnText(commentId){
+      if(this.formData['loading' + commentId]){
+        //该按钮处于 loading 状态
+        return 'loading...';
+      }else{
+        //该按钮不处于 loading 状态
+        return '回复';
       }
     },
     //出现会话层

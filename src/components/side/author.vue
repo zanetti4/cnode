@@ -1,5 +1,5 @@
 <template>
-  <section class="author">
+  <section class="author" v-if="user.loginname">
     <Card :title="cardTit" :bordered="false" :dis-hover="true">
       <div class="demo-avatar">
         <router-link :to="{name: 'User', params: {loginname: user.loginname}}">

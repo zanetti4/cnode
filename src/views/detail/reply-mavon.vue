@@ -3,7 +3,7 @@
     <Card title="添加回复" :bordered="false" :dis-hover="true">
       <form class="reply-form" @submit.prevent="reply">
         <mavon-editor v-model.trim="formData.value" :subfield="formData.subfield" :toolbars="formData.toolbars" class="reply-form-mavon"></mavon-editor>
-        <Button type="primary" html-type="submit">回复</Button>
+        <Button type="primary" html-type="submit" :loading="isLoading">{{btnText}}</Button>
       </form>
     </Card>
   </section>
@@ -32,8 +32,15 @@ export default {
         },
         subfield: false
       },
-      newComments: 0
+      newComments: 0,
+      isLoading: false
     };
+  },
+  computed: {
+    //按钮文字
+    btnText(){
+      return this.isLoading ? 'Loading...' : '回复';
+    }
   },
   methods: {
     async reply(){
@@ -41,6 +48,8 @@ export default {
 
       if(content){
         //有内容
+        this.isLoading = true;
+
         let accesstoken = Cookies.get('accesstoken');
         let topicId = this.$route.params.id;
 
@@ -60,6 +69,8 @@ export default {
           //评论发布失败
           alert('评论发布失败');
         }
+
+        this.isLoading = false;
       }else{
         //没内容
         this.$nextTick(() => {

@@ -170,8 +170,6 @@ export default {
       let isLogin = Cookies.get('success');
       let name = this.$route.name;
       let index = -1;
-
-      // console.log(1111111111);
       
       if(isLogin){
         //登录了
@@ -192,6 +190,7 @@ export default {
 
           // headNav.className = 'ivu-col ivu-col-span-9 ivu-col-offset-5 headnav';
           headNav.className = 'ivu-col ivu-col-span-4 ivu-col-offset-10 headnav';
+          // console.log(headNav.className);
         });
       }else{
         //没登录
@@ -241,9 +240,10 @@ export default {
       return name === 'Signout' ? true : false;
     },
     //获取未读消息数
-    async messageCount(){
+    messageCount(){
       let accesstoken = Cookies.get('accesstoken');
 
+      // console.log(accesstoken);
       this.myToken = accesstoken;
 
       if(this.myToken){

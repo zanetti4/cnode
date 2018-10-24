@@ -4,10 +4,10 @@
       <cnode-article @get-user="getUserDe" @get-replies="getRepliesDe" :newComment="hasNewComment" :newReplyCom="hasNewReplyCom"></cnode-article>
       <comments :allReplies="replies" @up-to-detail="upDetail" @add-render="addRenderDe" @new-reply-comment="newReplyComDe"></comments>
       <!-- <reply v-if="false"></reply> -->
-      <reply-mavon v-if="isLogin" @new-comment="newCommentDe"></reply-mavon>
+      <reply-mavon v-if="isLogin && loginname" @new-comment="newCommentDe"></reply-mavon>
     </Col>
     <Col span="5">
-      <author :authorName="loginname" v-if="loginname.length" @user-to-detail="otherTopics"></author>
+      <author :authorName="loginname" v-if="loginname" @user-to-detail="otherTopics"></author>
       <ads></ads>
       <others :otherTopics="recentTopics"></others>
       <no-reply></no-reply>

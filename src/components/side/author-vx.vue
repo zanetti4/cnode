@@ -15,22 +15,25 @@
 </template>
 
 <script>
+import Cookies from 'js-cookie';
+
 export default {
   name: 'Author',
-  /* props: {
-    authorName: {
+  props: {
+    authorNameDe: {
       type: String,
       default: ''
     }
-  }, */
+  },
   data(){
     return {
       user: {}/* ,
-      authorName: this.$store.state.detail.author.loginname */
+      detailData: {} */
     };
   },
   created(){
     this.getUserEmit();
+    // this.getDetailData();
   },
   /* watch: {
     authorName(){
@@ -50,18 +53,36 @@ export default {
     },
     //从 vuex 获取作者名
     authorName(){
+      // console.log(this.$store.state.detail.author);
+      this.$store.commit('detailMu', { 
+        detail: {
+          author: {
+            loginname: this.authorNameDe
+          }
+        }
+      });
+
       return this.$store.state.detail.author.loginname;
     }
   },
   methods: {
     //获取作者信息并向上传递
     async getUserEmit(){
-      //console.log(this.authorName);
-      
       let {data} = await this.$api.getUser(this.authorName);
 
       this.user = data.data;
       this.$emit('user-to-detail', this.user);
+    },
+    //获取话题数据
+    getDetailData(){
+      let id = this.$route.params.id;
+      let accesstoken = Cookies.get('accesstoken');
+
+      accesstoken = accesstoken ? accesstoken : '';
+
+      this.$api.getDetail(id, { accesstoken }).then(({ data }) => {
+        this.detailData = data.data;
+      });
     }
   }
 }

@@ -2,13 +2,13 @@
   <Row type="flex" justify="center" :gutter="16">
     <Col span="16" class-name="leftcol" :style="{padding: 0, 'background-color': 'white'}">
       <sub-nav></sub-nav>
+      <Spin size="large" fix v-if="spinShow"></Spin>
       <list :dataList="list"></list>
       <!-- cNode 没有提供总数据条数 -->
       <Page :total="100" :current="curPage" @on-change="changePage" class-name="mainpage" />
     </Col>
     <Col span="5">
-      <author v-if="isLogin" :authorName="loginname"></author>
-      <!-- <author v-if="isLoginVuex" :authorName="loginname"></author> -->
+      <author v-if="loginname" :authorName="loginname"></author>
       <publish-btn v-if="isLogin"></publish-btn>
       <ads></ads>
       <!-- <no-reply :noReplyList="noReplyList"></no-reply> -->
@@ -50,8 +50,9 @@ export default {
       tab: '',
       list: [],
       spinShow: true,
-      navConfig/* ,
-      noReplyList: [] */
+      navConfig,
+      // noReplyList: []
+      userInfos: null
     };
   },
   created(){
@@ -70,16 +71,9 @@ export default {
 
       return isLogin;
     },
-    /* isLoginVuex(){
-      //return this.$store.state.isLogin;
-      return this.$store.getters.isLoginVuex;
-    }, */
-    // ...mapGetters(['isLoginVuex']),
     //获取登录用户名
     loginname(){
       let loginname = Cookies.get('loginname');
-
-      //console.log(loginname);
 
       return loginname;
     }
@@ -103,9 +97,12 @@ export default {
         query: {page}
       });
 
+      this.spinShow = true;
+
       let {data} = await this.$api.getTopics(o);
 
       this.list = data.data;
+      this.spinShow = false;
     },
     //获取首页数据
     async getTopics(){
@@ -141,15 +138,14 @@ export default {
 
       this.list = data.data;
       this.spinShow = false;
-    }/* ,
+    },
     //获取没有回复的数据
-    async getNoReply(){
+    /*async getNoReply(){
       let {data} = await this.$api.getTopics({
         tab: 'all', 
         limit: 50
       });
 
-      //console.log(data.data.length);
       this.noReplyList = data.data.filter(item => item.reply_count === 0).slice(0, 5);
     } */
   }

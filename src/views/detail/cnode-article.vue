@@ -2,7 +2,7 @@
   <div class="content-main">
     <Spin size="large" fix v-if="spinShow"></Spin>
     <div class="main-article">
-      <div v-if="true" class="panel">
+      <div class="panel">
         <div class="ks-clear arti-head">
           <span v-if="info.top || info.good" :class="{top: info.top, good: info.good}">{{topGood}}</span>
           <h1>{{info.title}}</h1>
@@ -18,7 +18,7 @@
             <Icon type="ios-create-outline" size="22" title="编辑" v-if="isAuthor" @click="toEdit" />
           </Col>
           <Col span="3" offset="10" class-name="ta-r" v-if="isLogin">
-            <Button type="success" class="collect" :class="{'cancel-col': info.is_collect}" @click="collect(info.id)">{{isCollect}}</Button>
+            <Button type="success" class="collect" :loading="isLoading" :class="{'cancel-col': info.is_collect}" @click="collect(info.id)">{{isCollect}}</Button>
           </Col>
         </Row>
         <div class="article" @click="clickImg($event)">
@@ -45,6 +45,7 @@ export default {
     return {
       info: {},
       spinShow: true,
+      isLoading: false,
       isRenderBig: false,
       imgSrc: '',
       topImg: 0,
@@ -137,9 +138,15 @@ export default {
 
       return isLogin;
     },
-    //显示收藏或取消收藏
+    //显示收藏或取消收藏，或者为 loading 状态
     isCollect(){
-      return this.info.is_collect ? '取 消 收 藏' : '收 藏';
+      if(this.isLoading){
+        //loading 状态
+        return 'Loading...';
+      }else{
+        //不是 loading 状态
+        return this.info.is_collect ? '取 消 收 藏' : '收 藏';
+      }
     },
     //判断是不是自己的文章
     isAuthor(){
@@ -238,6 +245,8 @@ export default {
     collect(id){
       let accesstoken = Cookies.get('accesstoken');
 
+      this.isLoading = true;
+
       if(this.info.is_collect){
         //取消收藏
         this.$api.deCollectTopic({
@@ -247,6 +256,8 @@ export default {
           this.info.is_collect = false;
         }, error => {
           console.log(error);
+        }).then(() => {
+          this.isLoading = false;
         });
       }else{
         //收藏
@@ -260,6 +271,19 @@ export default {
           console.log(error);
         }); */
 
+        /* setTimeout(() => {
+          this.$api.collectTopic({
+            accesstoken,
+            topic_id: id
+          }).then(res => {
+            this.info.is_collect = true;
+          }, error => {
+            console.log(error);
+          }).then(() => {
+            this.isLoading = false;
+          });
+        }, 4000); */
+
         this.$api.collectTopic({
           accesstoken,
           topic_id: id
@@ -267,6 +291,8 @@ export default {
           this.info.is_collect = true;
         }, error => {
           console.log(error);
+        }).then(() => {
+          this.isLoading = false;
         });
       }
     },

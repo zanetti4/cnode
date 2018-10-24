@@ -3,6 +3,7 @@ import Router from 'vue-router';
 import Cookies from 'js-cookie';
 import Main from '@/views/main/main';
 import Detail from '@/views/detail/detail';
+import DetailVx from '@/views/detail/detail-vx';
 import User from '@/views/user/user';
 import Publish from '@/views/publish/publish';
 import topNav from '@/router/topNav';
@@ -22,7 +23,8 @@ const scrollBehavior = (to, from, savedPosition) => {
             // new navigation.
             // scroll to anchor by returning the selector
         if (to.hash) {
-            position.selector = to.hash
+            // console.log(to.hash);
+            position.selector = to.hash;
         }
         // check if any matched route config has meta that requires scrolling to top
         if (to.matched.some(m => m.meta.scrollToTop)) {
@@ -33,7 +35,6 @@ const scrollBehavior = (to, from, savedPosition) => {
         }
         // if the returned position is falsy or an empty object,
         // will retain current scroll position.
-        //console.log(position);
         return position;
     }
 };
@@ -49,9 +50,12 @@ let router = new Router({
             component: Main
         },
         /* {
-          path: '/detail/:id:hash?',
-          name: 'Detail',
-          component: Detail
+            path: '/detail/:id',
+            name: 'Detail',
+            component: DetailVx,
+            meta: {
+                scrollToTop: true
+            }
         }, */
         {
             path: '/detail/:id',

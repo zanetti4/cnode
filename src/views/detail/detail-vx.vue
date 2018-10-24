@@ -2,12 +2,13 @@
   <Row type="flex" justify="center" :gutter="16" class-name="pt-15">
     <Col span="16" class-name="leftcol" :style="{padding: 0}">
       <!-- <cnode-article @get-user="getUserDe" @get-replies="getRepliesDe"></cnode-article> -->
-      <cnode-article-vx @get-replies="getRepliesDe"></cnode-article-vx>
+      <cnode-article-vx @get-replies="getRepliesDe" @author-name="authorNameDe"></cnode-article-vx>
       <comments :allReplies="replies" @up-to-detail="upDetail"></comments>
     </Col>
     <Col span="5">
       <!-- <author :authorName="loginname" v-if="loginname.length" @user-to-detail="otherTopics"></author> -->
-      <author @user-to-detail="otherTopics"></author>
+      <!-- <author @user-to-detail="otherTopics"></author> -->
+      <author-vx :authorNameDe="loginname" @user-to-detail="otherTopics"></author-vx>
       <ads></ads>
       <others :otherTopics="recentTopics"></others>
       <no-reply></no-reply>
@@ -22,6 +23,7 @@ import Comments from './comments';
 import Ads from '@/components/side/ads';
 import NoReply from '@/components/side/no-reply';
 import Author from '@/components/side/author';
+import AuthorVx from '@/components/side/author-vx';
 import Others from '@/components/side/others';
 
 export default {
@@ -32,12 +34,13 @@ export default {
     Ads,
     NoReply,
     Author,
+    AuthorVx,
     Others,
     Comments
   },
   data(){
     return {
-      // loginname: '',
+      loginname: '',
       recentTopics: [],
       userData: {},
       replies: []
@@ -112,6 +115,10 @@ export default {
     } */
     upDetail(obj){
       this.commit('upMu', obj);
+    },
+    //获得作者名
+    authorNameDe(authorName){
+      this.loginname = authorName;
     }
   }
 }

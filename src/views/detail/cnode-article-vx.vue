@@ -46,7 +46,9 @@ export default {
   },
   components: {BigImg},
   created(){
+    // console.log(this.authorName);
     this.getDetailVuex();
+    this.$emit('author-name', this.authorName);
   },
   mounted(){
     setTimeout(() => {
@@ -85,9 +87,11 @@ export default {
     //获取作者名
     authorName(){
       //下面这行执行了两次，所以要先确保有值，再进行操作。
-      if(this.info.author){
+      /* if(this.info.author){
         return this.info.author.loginname;
-      }
+      } */
+      
+      return this.$store.state.detail.author.loginname;
     },
     //置顶或精华
     topGood(){
