@@ -14,6 +14,7 @@ iview: 一套基于 Vue.js 的高质量 UI 组件库。
 js-cookie: 简单、轻量的操作 cookie 的 js 接口。
 mavon-editor: 基于Vue的markdown编辑器。
 vue-markdown: 针对 vue 的强大、高效的 markdown 解析器。
+vue-wechat-title：动态设置页面 title 的插件。
 ```
 
 ## 路由设计及功能
@@ -29,6 +30,7 @@ vue-markdown: 针对 vue 的强大、高效的 markdown 解析器。
     - Replies: 用户参与的话题页，分页、加载中。
 - Mymes: 未读消息页，标记所有未读消息为已读，新消息、过往信息，两个分页。
 - Signout: 退出，如果正在浏览的页面需要登录，则退出到主题首页。如果正在浏览的页面不需要登录，则返回该页面。
+- 各页面拥有静态或动态的 *title*。
 
 ## 项目结构
 ``` bash
