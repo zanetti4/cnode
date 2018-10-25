@@ -3,7 +3,6 @@ import Router from 'vue-router';
 import Cookies from 'js-cookie';
 import Main from '@/views/main/main';
 import Detail from '@/views/detail/detail';
-import DetailVx from '@/views/detail/detail-vx';
 import User from '@/views/user/user';
 import Publish from '@/views/publish/publish';
 import topNav from '@/router/topNav';
@@ -16,14 +15,12 @@ Vue.use(Router);
 const scrollBehavior = (to, from, savedPosition) => {
     if (savedPosition) {
         // savedPosition is only available for popstate navigations.
-        //console.log(savedPosition);
         return savedPosition;
     } else {
         const position = {}
             // new navigation.
             // scroll to anchor by returning the selector
         if (to.hash) {
-            // console.log(to.hash);
             position.selector = to.hash;
         }
         // check if any matched route config has meta that requires scrolling to top
@@ -39,6 +36,8 @@ const scrollBehavior = (to, from, savedPosition) => {
     }
 };
 
+const defaultTitle = 'CNode：Node.js专业中文社区';
+
 let router = new Router({
     mode: 'history',
     scrollBehavior,
@@ -47,16 +46,11 @@ let router = new Router({
         {
             path: '/main/:tab?',
             name: 'Main',
-            component: Main
-        },
-        /* {
-            path: '/detail/:id',
-            name: 'Detail',
-            component: DetailVx,
+            component: Main,
             meta: {
-                scrollToTop: true
+                title: defaultTitle
             }
-        }, */
+        },
         {
             path: '/detail/:id',
             name: 'Detail',
@@ -69,14 +63,20 @@ let router = new Router({
             path: '/publish',
             name: 'Publish',
             component: Publish,
-            meta: { isLogin: true }
+            meta: {
+                isLogin: true,
+                title: defaultTitle
+            }
         },
         {
             // path: '/edit',
             path: '/edit/:topicId',
             name: 'Edit',
             component: Publish,
-            meta: { isLogin: true }
+            meta: {
+                isLogin: true,
+                title: defaultTitle
+            }
         },
         {
             path: '/user/:loginname',
@@ -92,7 +92,10 @@ let router = new Router({
             name: 'Mymes',
             //title: '未读消息',
             component: Mymes,
-            meta: { isLogin: true }
+            meta: {
+                isLogin: true,
+                title: defaultTitle
+            }
         },
         {
             path: '/setting',
@@ -114,8 +117,6 @@ let router = new Router({
                     });
                 } else {
                     //点退出时浏览的页面不需要登录
-                    // console.log(222222);
-
                     next({
                         name: from.name,
                         params: from.params,
@@ -124,11 +125,6 @@ let router = new Router({
                 }
             }
         },
-        /* {
-            path: '/login',
-            name: 'Login',
-            component: Login
-        }, */
         {
             path: '*',
             redirect: '/'
@@ -137,14 +133,17 @@ let router = new Router({
 });
 
 router.beforeEach((to, from, next) => {
+    if (to.meta.title) {
+        //要进入的路由有默认标题
+        document.title = to.meta.title;
+    }
+
     if (to.matched.some(item => item.meta.isLogin)) {
         //需要登录
-        //let userName = Cookies.get('cnode-user');
         let isLogin = Cookies.get('success');
 
         if (isLogin) {
             //登录了
-            //console.log(22222);
             next();
         } else {
             //没登录

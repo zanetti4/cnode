@@ -1,5 +1,5 @@
 <template>
-  <div class="content-main">
+  <div class="content-main" v-wechat-title="$route.meta.title">
     <Spin size="large" fix v-if="spinShow"></Spin>
     <div class="main-article">
       <div class="panel">
@@ -12,7 +12,6 @@
             <span>发布于{{createTime}}</span>  
             <span>作者 {{authorName}}</span>
             <span>{{info.visit_count}} 次浏览</span>  
-            <!-- <span>最后一次编辑是 7 个月前</span> -->
             <span>来自 {{tab}}</span>
             <br />
             <Icon type="ios-create-outline" size="22" title="编辑" v-if="isAuthor" @click="toEdit" />
@@ -36,7 +35,6 @@ import navConfig from '@/router/navConfig';
 import BigImg from './big-img';
 import Cookies from 'js-cookie';
 import VueMarkdown from 'vue-markdown';
-//import axios from 'axios';
 
 export default {
   name: 'CnodeArticle',
@@ -70,15 +68,6 @@ export default {
     this.getDetailEmitName();
   },
   mounted(){
-    /* this.$nextTick(() => {
-      let links = document.querySelector('.topic_content').querySelectorAll('a');
-
-      links.forEach(item => {
-        item.target = '_blank';
-        //item.setAttribute('target', '_blank');
-      });
-    }); */
-
     setTimeout(() => {
       //给文章内所有链接设置在新选项卡打开
       let links = document.querySelector('.topic_content').querySelectorAll('a');
@@ -113,8 +102,6 @@ export default {
     //获取作者名
     authorName(){
       //下面这行执行了两次，所以要先确保有值，再进行操作。
-      //console.log(this.info.author);
-
       if(this.info.author){
         return this.info.author.loginname;
       }
@@ -172,8 +159,6 @@ export default {
 
       this.spinShow = true;
 
-      //let {data} = await this.$api.getDetail(id);
-
       if(accesstoken){
         //登录了
         data = await this.$api.getDetail(id, {
@@ -185,23 +170,8 @@ export default {
         data = await this.$api.getDetail(id, {mdrender: false});
       }
 
-      //this.info = data.data;
       this.info = data.data.data;
-      //console.log(this.info.content);
-
-      //HTML反转义
-      /* function HTMLDecode(text) { 
-        var temp = document.createElement("div"); 
-
-        temp.innerHTML = text; 
-
-        var output = temp.innerText || temp.textContent; 
-
-        temp = null; 
-        return output; 
-      } 
-
-      this.info.content = HTMLDecode(this.info.content); */
+      this.$route.meta.title = `${this.info.title} - CNode技术社区`;
 
       let REGX_HTML_DECODE = /&\w+;/g;
       let that = this;
@@ -210,8 +180,6 @@ export default {
       function decodeHtml(s){
         return s.replace(REGX_HTML_DECODE, function($0){
           let c = that.HTML_DECODE[$0];
-
-          //console.log(c);
 
           if(c === undefined){
             //反转义表中没有
@@ -234,7 +202,6 @@ export default {
         // 获取当前图片地址
         this.imgSrc = e.target.src;
         this.topImg = e.target.offsetTop;
-        // console.dir(e.target);
       }
     },
     //退出大图
@@ -261,29 +228,6 @@ export default {
         });
       }else{
         //收藏
-        /* axios.post('https://cnodejs.org/api/v1/topic_collect/collect', {
-          accesstoken,
-          topic_id: id
-          }).then(res => {
-          //console.log(res.data);
-          this.info.is_collect = true;
-        }, error => {
-          console.log(error);
-        }); */
-
-        /* setTimeout(() => {
-          this.$api.collectTopic({
-            accesstoken,
-            topic_id: id
-          }).then(res => {
-            this.info.is_collect = true;
-          }, error => {
-            console.log(error);
-          }).then(() => {
-            this.isLoading = false;
-          });
-        }, 4000); */
-
         this.$api.collectTopic({
           accesstoken,
           topic_id: id
@@ -301,7 +245,7 @@ export default {
       this.$router.push({
         name: 'Edit',
         /* params: {
-          detailInfo: this.info
+          topicId: this.info.id
         } */
         params: {
           detailInfo: this.info,

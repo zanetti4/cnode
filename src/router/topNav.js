@@ -1,5 +1,7 @@
 import Login from '@/views/login/login';
 
+const defaultTitle = 'CNode：Node.js专业中文社区';
+
 let topNav = [{
         path: '/',
         name: 'Home',
@@ -30,7 +32,10 @@ let topNav = [{
         path: '/login',
         name: 'Login',
         title: '登录',
-        component: Login
+        component: Login,
+        meta: {
+            title: defaultTitle
+        }
     }
 ];
 

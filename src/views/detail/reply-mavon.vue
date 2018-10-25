@@ -58,8 +58,6 @@ export default {
           content
         });
         
-        // console.log(data);
-        
         if(data.success){
           //评论发布成功
           this.newComments++;

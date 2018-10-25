@@ -4,6 +4,7 @@ import Vue from 'vue';
 import App from './App';
 import iView from 'iview';
 import mavonEditor from 'mavon-editor';
+import VueWechatTitle from 'vue-wechat-title';
 import 'jquery';
 import router from './router'
 import store from './store';
@@ -13,13 +14,10 @@ import 'iview/dist/styles/iview.css';
 import '@/assets/css/index.css';
 import 'mavon-editor/dist/css/index.css';
 
-// var Vue = require('vue')
-// var mavonEditor = require('mavon-editor')
-
+Vue.use(VueWechatTitle);
 Vue.use(api);
 Vue.use(myMethods);
 Vue.use(iView);
-// Vue.use(window['mavon-editor']);
 Vue.use(mavonEditor);
 Vue.config.productionTip = false
 
@@ -33,17 +31,3 @@ new Vue({
     components: { App },
     template: '<App/>'
 })
-
-/* var vm = new Vue({
-  el: '#app',
-  router,
-  store,
-  api,
-  components: { App },
-  template: '<App/>',
-  methods: { 
-    lastReplyTime: function (data, on) { 
-      eventHub.$emit('relativeTime', data); 
-    } 
-  } 
-}); */

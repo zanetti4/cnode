@@ -24,9 +24,6 @@ export default {
     Guide,
     // PubCard,
     PubCardMavon
-  },
-  methods: {
-    
   }
 }
 </script>

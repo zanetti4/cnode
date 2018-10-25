@@ -58,7 +58,6 @@ export default {
     //接收用户信息
     userInfoUser(user){
       this.recentTopics = user.recent_topics.slice(0, 5);
-      //console.log(this.recentTopics);
       this.recentReplies = user.recent_replies.slice(0, 5);
       this.loginname = user.loginname;
     }

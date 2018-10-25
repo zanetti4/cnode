@@ -53,25 +53,6 @@ export default {
       return 10;
     }
   },
-  /* async created(){
-    let loginname = this.$route.params.loginname;
-    let page = this.$route.query.page;
-
-    if(!page){
-      //page 不存在
-      page = 1;
-    }
-
-    this.curPage = +page;
-
-    let {data} = await this.$api.getUser(loginname);
-
-    this.user = data.data;
-    this.recentTopics = this.user.recent_topics;
-    //不能拿到用户创建的所有主题
-    //console.log(this.recentTopics.length);
-    this.getDetails();
-  }, */
   async created(){
     let loginname = this.$route.params.loginname;
     let page = this.$route.query.page;
@@ -100,7 +81,6 @@ export default {
     }
 
     this.curPage = +page;
-    //console.log(this.curPage);
 
     let start = (page - 1) * this.pageSize;
 
@@ -110,15 +90,6 @@ export default {
   },
   methods: {
     //根据话题 id 获取话题详细信息
-    /* async getDetails(){
-      let recentTopics = this.user.recent_topics;
-
-      for(let i = 0; i < recentTopics.length; i++){
-        let {data} = await this.$api.getDetail(recentTopics[i].id);
-
-        this.details.push(data.data);
-      };
-    }, */
     async getDetails(){
       this.details = [];
       this.spinShow = true;

@@ -38,37 +38,6 @@ export default {
   watch: {
     hasReadMes: 'showCurCon'
   },
-  created(){
-    /* this.spinShow = true;
-
-    let page = this.$route.query.page;
-
-    if(!page){
-      //page 不存在
-      page = 1;
-    }
-
-    this.curPage = +page;
-
-    let maxPage = Math.ceil(this.hasReadMes.length/this.pageSize);
-
-    if(page > maxPage){
-      //page 超出最大页数
-      page = 1;
-
-      this.$router.push({
-        query: {page: 1}
-      });
-    }
-
-    this.curPage = +page;
-
-    let start = (page - 1) * this.pageSize;
-
-    this.curHasRead = this.hasReadMes.slice(start, start + this.pageSize);
-    // console.log(this.curHasRead);
-    this.spinShow = false; */
-  },
   computed: {
     //每页显示条数
     pageSize(){
@@ -125,7 +94,6 @@ export default {
       let start = (page - 1) * this.pageSize;
 
       this.curHasRead = this.hasReadMes.slice(start, start + this.pageSize);
-      // console.log(this.curHasRead);
       this.spinShow = false;
     }
   }

@@ -16,20 +16,17 @@
       <FormItem label="标题" label-for="title" prop="title">
         <Input element-id="title" v-model="formData.title" placeholder="十个字及以上"></Input>
       </FormItem>
-      <!-- <mavonEditor v-model="formData.value" ref="mavon" /> -->
       <mavon-editor v-model="formData.value" :subfield="formData.subfield" :toolbars="formData.toolbars" class="pubform-mavon"></mavon-editor>
-      <Button type="primary" html-type="submit">提交</Button>
+      <Button type="primary" html-type="submit" :loading="isLoading">{{btnText}}</Button>
     </Form>
   </section>
 </template>
 
 <script>
 import Cookies from 'js-cookie';
-// import { mavonEditor } from 'mavon-editor';
 
 export default {
   name: 'PubCardMavon',
-  // components: {mavonEditor},
   data(){
     return {
       formData: {
@@ -58,7 +55,8 @@ export default {
         ]
       },
       submitKind: '',
-      cardTitle: ''
+      cardTitle: '',
+      isLoading: false
     };
   },
   created(){
@@ -83,6 +81,12 @@ export default {
       }
     }
   },
+  computed: {
+    //按钮文字
+    btnText(){
+      return this.isLoading ? 'Loading...' : '提交';
+    }
+  },
   methods: {
     //提交
     publish(name){
@@ -93,6 +97,8 @@ export default {
 
           if(content){
             //有内容
+            this.isLoading = true;
+
             let accesstoken = Cookies.get('accesstoken');
             let data = {
               accesstoken,
@@ -114,6 +120,7 @@ export default {
               });
             }
 
+            this.isLoading = false;
             this.$router.push({name: 'Detail', params: {id: res.data.topic_id}});
           }else{
             //没内容

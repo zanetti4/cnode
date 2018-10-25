@@ -110,7 +110,6 @@ let store = new Vuex.Store({
         detailMu(state, payload) {
             state.detail = payload.detail;
             state.spinShow = false;
-            // console.log(state.detail.author.loginname);
         },
         //显示 loading
         showSpinMu(state, payload) {

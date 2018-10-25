@@ -6,25 +6,15 @@
         <article v-for="item in recentTo" :key="item.id">
           <Avatar shape="square" :src="item.author.avatar_url" size="small" />
           <span class="recentto-numbers">{{getReplyLen(item.id)}}/<span>{{getVisitLen(item.id)}}</span></span>
-          <!-- <span v-if="isTop(item.id) || isGood(item.id)" class="recentto-tag" :class="{top: isTop(item.id), good: isGood(item.id)}">{{topGood(item.id)}}</span> -->
           <span v-if="isTopGood(item.id, 'top') || isTopGood(item.id, 'good')" class="recentto-tag" :class="{top: isTopGood(item.id, 'top'), good: isTopGood(item.id, 'good')}">{{topGood(item.id)}}</span>
           <router-link 
           :to="{name: 'Detail', params: {id: item.id}}"
           class="recentto-tit ks-text-overflow"
           :title="item.title"
           >{{item.title}}</router-link>
-          <!-- <router-link :to="{name: 'Detail', params: {id: item.id, hash: getLastReplyId(item.id)}}" class="recentto-reply" v-if="getLastReplyAvatar(item.id)">
-            <Avatar shape="square" :src="getLastReplyAvatar(item.id)" size="small" />{{lastReplyTime(item.last_reply_at)}}
-          </router-link> -->
           <router-link :to="{name: 'Detail', params: {id: item.id}, hash: getLastReplyId(item.id)}" class="recentto-reply" v-if="lastReplyAvatar(item.id)">
             <Avatar shape="square" :src="lastReplyAvatar(item.id)" size="small" />{{lastReplyTime(item.last_reply_at)}}
           </router-link>
-          <!-- <a :href="`/detail/${item.id}${getLastReplyId(item.id)}`" class="recentto-reply" v-if="getLastReplyAvatar(item.id)">
-            <Avatar shape="square" :src="getLastReplyAvatar(item.id)" size="small" />{{lastReplyTime(item.last_reply_at)}}
-          </a> -->
-          <!-- <a href="javascript:;" class="recentto-reply" v-if="getLastReplyAvatar(item.id)" @click="toDetailLastReply(item.id, getLastReplyId(item.id))">
-            <Avatar shape="square" :src="getLastReplyAvatar(item.id)" size="small" />{{lastReplyTime(item.last_reply_at)}}
-          </a> -->
         </article>
       </CellGroup>
       <router-link :to="{name: 'Topics'}" class="recentto-more">
@@ -35,53 +25,6 @@
 </template>
 
 <script>
-//import time from '@/assets/js/time';
-//import Vue from 'vue';
-//import getRelativeTime from '@/assets/js/relative-time';
-
-/* var eventHub = new Vue({
-  name: 'RecentTopics',
-  props: {
-    recentTo: {
-      type: Array,
-      default(){
-        return [];
-      }
-    }
-  },
-  created(){
-    eventHub.$on('relativeTime', function (anytime) { 
-      that.lastReplyTime(anytime); 
-    });
-  },
-  methods: {
-    //计算最后回复的相对时间
-    lastReplyTime(replyTime){
-      let obj = time.getTime(replyTime, new Date().toISOString());
-
-      switch(true){
-        case obj.year !== 0:
-          return `${obj.year} 年前`;
-          break;
-        case obj.month !== 0:
-          return `${obj.month} 个月前`;
-          break;
-        case obj.day !== 0:
-          return `${obj.day} 天前`;
-          break;
-        case obj.hour !== 0:
-          return `${obj.hour} 小时前`;
-          break;
-        case obj.minute !== 0:
-          return `${obj.minute} 分钟前`;
-          break;
-        default:
-          return '刚刚';
-      };
-    } 
-  }
-}); */
-
 export default {
   name: 'RecentTopics',
   props: {
@@ -99,31 +42,8 @@ export default {
     };
   },
   created(){
-    /* this.details = this.recentTo.map(async topic => {
-      let {data} = await this.$api.getDetail(topic.id);
-
-      return data.data;
-    }); */
-
-    /* for(let i = 0; i < this.recentTo.length; i++){
-      let {data} = await this.$api.getDetail(this.recentTo[i].id);
-
-      this.details.push(data.data);
-    }; */
-
     this.getDetails();
-    //console.log(this.details);
   },
-  /* mounted(){
-    this.$nextTick(() => {
-      let lastReplies = document.querySelectorAll('.recentto-reply');
-
-      lastReplies.forEach(item => {
-        console.log(item.href);
-        item.href = decodeURIComponent(item.href);
-      });
-    });
-  }, */
   watch: {
     /* recentTo(){
       this.getDetails();
@@ -133,8 +53,6 @@ export default {
   methods: {
     //根据话题 id 获取话题详细信息
     async getDetails(){
-      //this.details = [];
-      //console.log(this.recentTo);
       this.spinShow = true;
 
       for(let i = 0; i < this.recentTo.length; i++){
@@ -191,31 +109,6 @@ export default {
     isTopGood(topicId, topGood){
       return this.$myMethods.topOrGood(topicId, topGood, this.details);
     },
-
-    //判断话题是否是置顶
-    /* isTop(topicId){
-      let topic = this.details.find(obj => obj.id === topicId);
-
-      if(topic){
-        //该话题存在
-        return topic.top;
-      }else{
-        //该话题不存在
-        return false;
-      }
-    }, */
-    //判断话题是否是精华
-    /* isGood(topicId){
-      let topic = this.details.find(obj => obj.id === topicId);
-
-      if(topic){
-        //该话题存在
-        return topic.good;
-      }else{
-        //该话题不存在
-        return false;
-      }
-    }, */
     //置顶或精华
     topGood(topicId){
       if(this.isTopGood(topicId, 'top') && this.isTopGood(topicId, 'good')){
@@ -264,8 +157,6 @@ export default {
         if(allReplies.length > 0){
           //话题有回复
           let hash = `#${allReplies[allReplies.length - 1].id}`;
-          //let hash = allReplies[allReplies.length - 1].id;
-          //console.log(encodeURIComponent('#'));
 
           return hash;
         }else{
@@ -319,8 +210,6 @@ export default {
     }
   }
 }
-
-//export default eventHub;
 </script>
 
 <style>

@@ -2,7 +2,6 @@
   <section class="noreply">
     <Card title="无人回复的话题" :bordered="false" :dis-hover="true">
       <CellGroup id="noreplyCon">
-        <!-- <Cell :title="item.title" v-for="item in noReplyList" :key="item.id" :to="{name: 'Detail', params: {id: item.id}}" ref="title" /> -->
         <Cell :title="item.title" v-for="item in getNoReply" :key="item.id" :to="{name: 'Detail', params: {id: item.id}}" ref="title" />
       </CellGroup>
     </Card>
@@ -31,14 +30,7 @@ export default {
   },
   mounted(){
     setTimeout(() => {
-      /* this.$refs.title.forEach(item => {
-        let tit = item.$children[0].$el.children[1].children[0];
-
-        tit.title = tit.innerText;
-      }); */
-
       let tits = document.querySelector('#noreplyCon').querySelectorAll('.ivu-cell-title');
-      //console.log(document.querySelector('#noreplyCon'));
 
       tits.forEach(div => {
         div.title = div.innerText;

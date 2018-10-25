@@ -45,34 +45,6 @@ export default {
     hasNotRead: 'showCurCon'
   },
   created(){
-    /* this.spinShow = true;
-
-    let page = this.$route.query.page;
-
-    if(!page){
-      //page 不存在
-      page = 1;
-    }
-
-    this.curPage = +page;
-
-    let maxPage = Math.ceil(this.hasNotRead.length/this.pageSize);
-
-    if(page > maxPage){
-      //page 超出最大页数
-      page = 1;
-
-      this.$router.push({
-        query: {page: 1}
-      });
-    }
-
-    this.curPage = +page;
-
-    let start = (page - 1) * this.pageSize;
-
-    this.curNotRead = this.hasNotRead.slice(start, start + this.pageSize);
-    this.spinShow = false; */
     if(this.mesCount !== 0){
       //有未读消息
       let accesstoken = Cookies.get('accesstoken');

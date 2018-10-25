@@ -24,9 +24,6 @@
               </Col>
             </Row>
             <!-- <p v-html="item.content" class="comments-row-con"></p> -->
-            <!-- <div @mouseenter="session">
-              <vue-markdown class="comments-row-con" :source="item.content"></vue-markdown>
-            </div> -->
             <vue-markdown class="comments-row-con" :source="item.content" @mouseover.native="session($event, item.author.loginname, item.reply_id)" @mouseout.native="hideSession($event, item.author.loginname)"></vue-markdown>
             <transition name="comreply">
               <form class="comments-row-reply" v-if="item.renderReply" @submit.prevent="reply(item.id, item.author.loginname, $event)">
@@ -48,7 +45,6 @@
 import time from '@/assets/js/time';
 import sessionPoptip from './session-poptip';
 import Cookies from 'js-cookie';
-import axios from 'axios';
 import Vue from 'vue';
 import VueMarkdown from 'vue-markdown';
 
@@ -66,7 +62,6 @@ export default {
   data(){
     return {
       formData: {
-        // value: '',
         toolbars: {
           bold: true, // 粗体
           italic: true, // 斜体
@@ -149,15 +144,6 @@ export default {
         let myId = Cookies.get('id');
         let myLoginname = Cookies.get('loginname');
 
-        /* axios.post(`https://cnodejs.org/api/v1/reply/${id}/ups`, {accesstoken}).then((res) => {
-          //console.log(res.data);
-          this.$emit('up-to-detail', {
-            id,
-            action: res.data.action,
-            myId
-          });
-        }); */
-
         if(myLoginname === loginname){
           //给自己点赞
           alert('呵呵，不能帮自己点赞。');
@@ -180,19 +166,6 @@ export default {
         alert('请先登录，登录后即可点赞。');
       }
     },
-    /* async up(id){
-      let accesstoken = Cookies.get('accesstoken');
-      
-      if(accesstoken){
-        //登录了
-        let {data} = await this.$api.up(id, {accesstoken});
-
-        console.log(data);
-      }else{
-        //没登录
-        alert('请先登录，登录后即可点赞。');
-      }
-    } */
     //是不是作者
     isAuthor(loginname){
       let myLoginname = Cookies.get('loginname');
@@ -301,7 +274,6 @@ export default {
     },
     //鼠标悬停在会话层
     showPoptip(){
-      // console.log(1111);
       clearTimeout(this.timerPoptip);
       this.showSession = true;
     },

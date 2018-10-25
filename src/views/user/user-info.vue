@@ -1,8 +1,9 @@
 <template>
-  <section class="userinfo">
+  <section class="userinfo" v-wechat-title="$route.meta.title">
     <Breadcrumb>
       <BreadcrumbItem to="/">主页</BreadcrumbItem>
     </Breadcrumb>
+    <Spin size="large" fix v-if="spinShow"></Spin>
     <div class="userinfo-con">
       <div class="demo-avatar">
         <Avatar shape="square" :src="user.avatar_url" size="large" /><span class="userinfo-con-name">{{user.loginname}}</span>
@@ -24,23 +25,11 @@ export default {
   data(){
     return {
       user: {},
-      collection: []
+      collection: [],
+      spinShow: true
     };
   },
   created(){
-    /* //发送请求：用户信息，并向上传递
-    let loginname = this.$route.params.loginname;
-    let {data} = await this.$api.getUser(loginname);
-
-    this.user = data.data;
-    this.$emit('userinfo-to-user', this.user);
-
-    //发送请求：用户所收藏的主题
-    let dataCollect = await this.$api.getCollection(loginname);
-
-    this.collection = dataCollect.data.data;
-    //console.log(dataCollect.data.data); */
-
     this.getUserCollection();
   },
   watch: {
@@ -82,15 +71,24 @@ export default {
   methods: {
     //发送请求：用户信息，并向上传递；用户所收藏的主题
     async getUserCollection(){
+      this.spinShow = true;
+
       let loginname = this.$route.params.loginname;
       let {data} = await this.$api.getUser(loginname);
 
       this.user = data.data;
+      
+      if(this.$route.name === 'User'){
+        //用户详情页
+        this.$route.meta.title = `@${this.user.loginname} 的个人主页 - CNode技术社区`;
+      }
+      
       this.$emit('userinfo-to-user', this.user);
 
       let dataCollect = await this.$api.getCollection(loginname);
 
       this.collection = dataCollect.data.data;
+      this.spinShow = false;
     }
   }
 }

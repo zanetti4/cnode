@@ -24,7 +24,6 @@ import Ads from '@/components/side/ads';
 import NoReply from '@/components/side/no-reply';
 import Author from '@/components/side/author';
 import Others from '@/components/side/others';
-// import Cookies from 'js-cookie';
 import Vue from 'vue';
 
 export default {
@@ -87,7 +86,6 @@ export default {
       let recentTo = user.recent_topics;
       let others = recentTo.slice(0, 5);
       let index = others.findIndex(topic => topic.id === id);
-      //console.log(index);
       
       if(index !== -1){
         //当前浏览的主题和其它话题重复了
@@ -140,8 +138,6 @@ export default {
         //找到那条评论，已经设置过 renderReply 属性
         targetComment.renderReply = !targetComment.renderReply;
       }
-
-      // console.log(this.replies);
     }
   }
 }

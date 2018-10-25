@@ -107,7 +107,6 @@ export default {
     //获取首页数据
     async getTopics(){
       let tab = this.$route.params.tab;
-      //console.log(tab);
       let page = this.$route.query.page;
 
       if(!page){
@@ -129,9 +128,7 @@ export default {
       }
 
       this.tab = tab;
-      //this.$emit('tab-to-main', tab);
       this.curPage = +page;
-      //this.$emit('page-to-main', +page);
       this.spinShow = true;
 
       let {data} = await this.$api.getTopics({tab, page});

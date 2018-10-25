@@ -46,12 +46,6 @@ export default {
     };
   },
   created(){
-    /* for(let i = 0; i < this.recentRe.length; i++){
-      let {data} = await this.$api.getDetail(this.recentRe[i].id);
-
-      this.details.push(data.data);
-    }; */
-
     this.getDetails();
   },
   watch: {

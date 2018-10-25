@@ -1,5 +1,4 @@
 <template>
-  <!-- <div class="layout" @click="test(44)"> -->
   <div class="layout">
     <Layout :style="{'background-color': 'transparent'}">
       <head-cnode :style="{'background-color': '#444'}"></head-cnode>
@@ -21,15 +20,7 @@ export default {
   components: {
     HeadCnode,
     FootCnode
-  }/* ,
-  watch: {
-    $route: 'test'
-  },
-  methods: {
-    test(param){
-      console.log(param);
-    }
-  } */
+  }
 }
 </script>
 

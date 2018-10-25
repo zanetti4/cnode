@@ -51,8 +51,6 @@ export default {
   methods: {
     //获取作者信息并向上传递
     async getUserEmit(){
-      //console.log(this.authorName);
-      
       let {data} = await this.$api.getUser(this.authorName);
 
       this.user = data.data;

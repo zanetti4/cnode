@@ -148,9 +148,6 @@ export default {
       this.getDetails();
     }
   }
-  /* mounted(){
-    console.log(this.$route);
-  } */
 }
 </script>
 
