@@ -49,9 +49,7 @@ export default {
   computed: {
     //判断是否登录
     isLogin(){
-      let isLogin = Cookies.get('success');
-
-      return isLogin;
+      return this.$store.getters.getIsLogin;
     }
   },
   methods: {

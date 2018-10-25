@@ -47,8 +47,8 @@ let store = new Vuex.Store({
         },
         //从 cookie 中读取我的字段
         getMyField(state) {
-            if (!state.myInfo) {
-                //刷新页面后
+            if (!state.myInfo && state.isLogin) {
+                //刷新页面后且为登录状态
                 state.myInfo = JSON.parse(Cookies.get('myField'));
             }
 

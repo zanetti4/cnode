@@ -8,7 +8,7 @@
       <Page :total="100" :current="curPage" @on-change="changePage" class-name="mainpage" />
     </Col>
     <Col span="5">
-      <author v-if="loginname" :authorName="loginname"></author>
+      <author v-if="isLogin" :authorName="loginname"></author>
       <publish-btn v-if="isLogin"></publish-btn>
       <ads></ads>
       <!-- <no-reply :noReplyList="noReplyList"></no-reply> -->
@@ -67,9 +67,7 @@ export default {
   computed: {
     //判断是否登录
     isLogin(){
-      let isLogin = Cookies.get('success');
-
-      return isLogin;
+      return this.$store.getters.getIsLogin;
     },
     //获取登录用户名
     loginname(){

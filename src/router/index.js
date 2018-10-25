@@ -117,6 +117,8 @@ let router = new Router({
                     });
                 } else {
                     //点退出时浏览的页面不需要登录
+                    // console.log(11111111);
+
                     next({
                         name: from.name,
                         params: from.params,

@@ -121,9 +121,7 @@ export default {
     },
     //判断是否登录
     isLogin(){
-      let isLogin = Cookies.get('success');
-
-      return isLogin;
+      return this.$store.getters.getIsLogin;
     },
     //显示收藏或取消收藏，或者为 loading 状态
     isCollect(){
