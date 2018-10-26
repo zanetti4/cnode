@@ -11,7 +11,7 @@
             <Input style="width: 285px" element-id="token" v-model="formData.token"></Input>
           </FormItem>
           <FormItem>
-            <Button type="primary" html-type="submit">登录</Button>
+            <Button type="primary" html-type="submit" :loading="isLoading">{{btnText}}</Button>
           </FormItem>
         </Form>
       </section>
@@ -67,7 +67,8 @@ export default {
       },
       fromRoute: '',
       params: {},
-      query: {}
+      query: {},
+      isLoading: false
     };
   },
   beforeRouteEnter(to, from, next){
@@ -77,12 +78,20 @@ export default {
       vm.query = from.query;
     });
   },
+  computed: {
+    //按钮文字
+    btnText(){
+      return this.isLoading ? 'Loading...' : '登录';
+    }
+  },
   methods: {
     //登录
     send2(name){
       this.$refs[name].validate((valid) => {
         if (valid) {
           //验证通过
+          this.isLoading = true;
+
           this.$api.validateAccess({accesstoken: this.formData.token}).then(res => {
             //登录成功
             let {data} = res;
@@ -134,6 +143,8 @@ export default {
           }, () => {
             this.$Message.error('登录失败!');
           });
+
+          this.isLoading = false;
         }
       });
     }
