@@ -205,8 +205,8 @@ this.$route.params.detailInfo
 ```javascript
 //从 cookie 中读取我的字段
 getMyField(state) {
-    if (!state.myInfo) {
-        //刷新页面后
+    if (!state.myInfo && state.isLogin) {
+        //刷新页面后且为登录状态
         state.myInfo = JSON.parse(Cookies.get('myField'));
     }
 
@@ -250,11 +250,14 @@ computed: {
 ```bash
 <reply-mavon v-if="isLogin && loginname" @new-comment="newCommentDe"></reply-mavon>
 ```
+19. 如何判断登录状态？  
+**解决办法：**  
+在计算属性中，通过 *vuex getters* 获取布尔值。
 ---
 **遗留问题：**  
-19. detail 视图按住 ctrl 点击首页，不能重定向到首页。  
-20. 在用户页面有该用户最近创建的主题列表，在点击某主题最后回复信息时，跳转到该主题页面，但不能定位到最后一条回复处，并出现报错。  
-21. 在 vue 中使用 ueditor 时出现了问题，似乎使用 ueditor 所对应的路由必须是一级的，改成二级路由就会报错。
+1. detail 视图按住 ctrl 点击首页，不能重定向到首页。  
+2. 在用户页面有该用户最近创建的主题列表，在点击某主题最后回复信息时，跳转到该主题页面，但不能定位到最后一条回复处，并出现报错。  
+3. 在 vue 中使用 ueditor 时出现了问题，似乎使用 ueditor 所对应的路由必须是一级的，改成二级路由就会报错。
 
 ## 安装
 
