@@ -236,7 +236,7 @@ myInfoKeys(){
 computed: {
   //从 vuex 获取作者名
   authorName(){
-    this.$store.commit('detailMu',{detial:{author:{loginname:"456"}}});
+    this.$store.commit('detailMu',{detail:{author:{loginname:"456"}}});
     return this.$store.state.detail.author.loginname;
   }
 }
