@@ -15,6 +15,8 @@ js-cookie: 简单、轻量的操作 cookie 的 js 接口。
 mavon-editor: 基于Vue的markdown编辑器。
 vue-markdown: 针对 vue 的强大、高效的 markdown 解析器。
 vue-wechat-title：动态设置页面 title 的插件。
+gulp: 用自动化构建工具增强你的工作流程！
+gulp-less: gulp 的 less 插件。
 ```
 
 ## 路由设计及功能
@@ -236,7 +238,7 @@ myInfoKeys(){
 computed: {
   //从 vuex 获取作者名
   authorName(){
-    this.$store.commit('detailMu',{detial:{author:{loginname:"456"}}});
+    this.$store.commit('detailMu',{detail:{author:{loginname:"456"}}});
     return this.$store.state.detail.author.loginname;
   }
 }
