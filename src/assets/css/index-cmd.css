@@ -1,7 +1,3 @@
-/* 可编译的多行注释 */
-.defaultLinkColor {
-  color: #444;
-}
 a {
   color: #444;
 }
@@ -49,20 +45,15 @@ img {
   display: block;
   max-width: 100%;
 }
-.disCon {
-  display: table;
-  content: "";
-}
 .ks-clear {
   *zoom: 1;
 }
-.ks-clear:before {
+.ks-clear:before,
+.ks-clear:after {
   display: table;
   content: "";
 }
 .ks-clear:after {
-  display: table;
-  content: "";
   clear: both;
 }
 .ks-text-overflow {
@@ -75,10 +66,10 @@ body {
   color: #333;
 }
 .leftcol {
-  position: static;
   border-radius: 4px;
   -moz-border-radius: 4px;
   -webkit-border-radius: 4px;
+  position: static;
 }
 .noreply,
 .friend,

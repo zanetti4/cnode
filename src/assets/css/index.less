@@ -1,0 +1,342 @@
+//无法编译的单行注释
+/* 可编译的多行注释 */
+
+.defaultLinkColor {color: #444;}
+
+a {
+    .defaultLinkColor;
+    &:hover {.defaultLinkColor;}
+}
+
+table {
+    max-width: 100%;
+    background-color: transparent;
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+img {
+    height: auto;
+    max-width: 100%;
+    vertical-align: middle;
+    border: 0;
+}
+
+.p-10 {
+    padding: 10px;
+}
+
+.ptb-10 {
+    padding: 10px 0;
+}
+
+.pt-15 {
+    padding-top: 15px;
+}
+
+.p-5 {
+    padding-top: 5px;
+}
+
+.ta-r {
+    text-align: right;
+}
+
+//模式匹配
+.margin(top, @len: 15px){
+    margin-top: @len;
+}
+
+.margin(bottom, @len: 5px){
+    margin-bottom: @len;
+}
+
+// .margin(@_){
+//     line-height: 3;
+// }
+
+.mt-15 {
+    .margin(top);
+}
+
+.mb-5 {
+    .margin(bottom);
+}
+
+.reactPic(@dis: inline-block){
+    display: @dis;
+    max-width: 100%;
+}
+
+.inline-pic {
+    .reactPic;
+}
+
+.block-pic {
+    .reactPic(block);
+}
+
+.disCon {
+    display: table;
+    content: "";
+}
+
+.ks-clear {
+    *zoom: 1;
+    &:before {
+        .disCon;
+    }
+    &:after {
+        .disCon;
+        clear: both;
+    }
+}
+
+.ks-text-overflow {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+body {
+    background-color: #E1E1E1;
+    color: #333;
+}
+
+.radius(@rad: 4px) {
+    border-radius: @rad;
+    -moz-border-radius: @rad;
+    -webkit-border-radius: @rad;
+}
+
+//arguments 代表所有参数
+// .radius(@rad: 4px) {
+//     border-radius: @arguments;
+//     -moz-border-radius: @arguments;
+//     -webkit-border-radius: @arguments;
+// }
+
+.leftcol {
+    position: static;
+    .radius();
+}
+
+.noreply,
+.friend,
+.author,
+.userinfo,
+.recentto,
+.markdown {
+    background-color: white;
+    margin-bottom: 15px;
+    .radius();
+}
+
+.noreply div.ivu-card-head p,
+.friend div.ivu-card-head p,
+.author div.ivu-card-head p,
+.recentto div.ivu-card-head p,
+.recentre div.ivu-card-head p,
+.comments div.ivu-card-head p,
+.about div.ivu-card-head p,
+.markdown div.ivu-card-head p {
+    font-weight: normal;
+}
+
+.recentto div.ivu-card-head,
+.recentre div.ivu-card-head {
+    border-bottom: solid 1px #E5E5E5;
+    background-color: #F6F6F6;
+    padding: 10px;
+    .radius(4px 4px 0 0);
+}
+
+.recentto div.ivu-card-body,
+.recentre div.ivu-card-body {
+    padding: 0;
+}
+
+.recentto article,
+.recentre article {
+    @flexFlow: row;
+    @dis: flex;
+
+    padding: 10px;
+    border-bottom: solid 1px #E5E5E5;
+    //@dis 怎么用在下面？-webkit-@dis 会被解析成 -webkit- flex
+    display: -webkit-flex;
+    display: @dis;
+    -webkit-flex-flow: @flexFlow;
+    flex-flow: @flexFlow;
+}
+
+.recentto article span.ivu-avatar,
+.recentre-avatar {
+    @flex: 0 0 auto;
+
+    -webkit-flex: @flex;
+    flex: @flex;
+}
+
+.recentto-numbers {
+    @flex: 0 0 9%;
+
+    -webkit-flex: @flex;
+    flex: @flex;
+    padding-left: 10px;
+}
+
+.recentto-numbers {
+    span {
+        font-size: 12px;
+        color: #B4B4B4;
+    }
+}
+
+.recentto-reply {
+    span {margin-right: 10px;}
+}
+
+.recentto-tit:link,
+.recentto-tit:visited {
+    @flex: 1 0 72%;
+
+    -webkit-flex: @flex;
+    flex: @flex;
+    margin-left: 10px;
+    color: #08C;
+    padding-right: 10px;
+}
+
+.recentto-tit:hover {
+    text-decoration: underline;
+}
+
+.recentto-reply:link,
+.recentto-reply:visited {
+    @flex: 0 0 11%;
+
+    -webkit-flex: @flex;
+    flex: @flex;
+    font-size: 12px;
+    color: #777;
+}
+
+.recentto-reply:hover,
+.recentto-more:hover {
+    color: #08C;
+}
+
+.recentto-tag {
+    @flex: 0 0 auto;
+
+    margin-left: 5px;
+    color: white;
+    padding: 4px;
+    font-size: 10px;
+    font-weight: 400;
+    border-radius: 4px;
+    text-align: center;
+    vertical-align: middle;
+    -webkit-flex: @flex;
+    flex: @flex;
+}
+
+.good {
+    background: #e67e22;
+}
+
+.top {
+    background-color: #42b983;
+}
+
+.userinfo div.ivu-breadcrumb a:link,
+.userinfo div.ivu-breadcrumb a:visited,
+.collec-bread span a:link,
+.collec-bread span a:visited {
+    color: #80BD01;
+}
+
+.userinfo div.ivu-breadcrumb a:hover,
+.collec-bread span a:hover {
+    text-decoration: underline;
+}
+
+.userinfo div.ivu-breadcrumb>span:last-child,
+.collec-bread>span:last-child {
+    font-weight: normal;
+}
+
+.userinfo span.ivu-breadcrumb-item-separator,
+.collec-bread span span.ivu-breadcrumb-item-separator {
+    color: #CCC;
+    margin: 0 3px;
+}
+
+.noreply div.ivu-card-head,
+.friend div.ivu-card-head,
+.author div.ivu-card-head,
+.comments div.ivu-card-head,
+.about div.ivu-card-head,
+.markdown div.ivu-card-head {
+    border-bottom: none;
+    background-color: #F6F6F6;
+    padding: 10px;
+    .radius(4px 4px 0 0);
+}
+
+.mainpage {
+    padding: 10px;
+}
+
+.mainpage li.ivu-page-item-active,
+.mainpage li.ivu-page-item:hover,
+.mainpage li.ivu-page-next:hover,
+.mainpage li.ivu-page-prev:hover {
+    border-color: #80BD01;
+}
+
+.mainpage li.ivu-page-item-active a,
+.mainpage li.ivu-page-item-active:hover a,
+.mainpage li.ivu-page-item:hover a,
+.mainpage li.ivu-page-next:hover a,
+.mainpage li.ivu-page-prev:hover a {
+    color: #80BD01;
+}
+
+.userinfo {
+    div.ivu-breadcrumb {
+        border-bottom: solid 1px #E5E5E5;
+        background-color: #F6F6F6;
+        padding: 10px;
+        .radius(4px 4px 0 0);
+    }
+}
+
+.collect {
+    @color: #80BD01;
+
+    background-color: @color;
+    border-color: @color;
+    &:hover {
+        @hoverColor: #6BA44E;
+
+        background-color: @hoverColor;
+        border-color: @hoverColor;
+    }
+}
+
+.noreply div.ivu-card-body,
+.friend div.ivu-card-body,
+.markdown div.ivu-card-body {
+    padding: 10px 0;
+}
+
+.noreply {
+    div.ivu-cell {padding: 7px 10px;}
+}
+
+.noreply div.ivu-cell-arrow,
+.markdown div.ivu-cell-arrow {
+    display: none;
+}
