@@ -17,6 +17,8 @@ vue-markdown: 针对 vue 的强大、高效的 markdown 解析器。
 vue-wechat-title：动态设置页面 title 的插件。
 gulp: 用自动化构建工具增强你的工作流程！
 gulp-less: gulp 的 less 插件。
+less: 动态样式表语言。
+less-loader: 将 less 编译为 css。
 ```
 
 ## 路由设计及功能
