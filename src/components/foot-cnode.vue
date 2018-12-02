@@ -29,7 +29,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="less">
 .foot {
   background-color: white;
   font-size: 14px;
@@ -39,9 +39,9 @@ export default {
   padding: 20px;
   padding-right: 0;
   line-height: 2;
+  div {font-size: 12px;}
+  a:hover {color: #08C;}
 }
-.foot-col div {font-size: 12px;}
-.foot-col a:hover {color: #08C;}
 .foot-col-logo {
   display: inline-block;
   width: 95px;
