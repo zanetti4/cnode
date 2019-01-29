@@ -133,6 +133,8 @@ export default {
 
             let ref = this.$route.query.ref;
 
+            this.isLoading = false;
+
             if(ref){
               //有目标页
               this.$router.push({name: ref});
@@ -142,9 +144,8 @@ export default {
             } 
           }, () => {
             this.$Message.error('登录失败!');
+            this.isLoading = false;
           });
-
-          this.isLoading = false;
         }
       });
     }
